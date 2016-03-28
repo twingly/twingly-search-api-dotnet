@@ -70,7 +70,7 @@ namespace Twingly.Search.Client
         /// </exception>
         public Query(string searchPattern)
         {
-            this.searchPattern = searchPattern;
+            this.SearchPattern = searchPattern;
         }
 
 

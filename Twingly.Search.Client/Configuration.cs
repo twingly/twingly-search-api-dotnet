@@ -1,0 +1,52 @@
+﻿using System;
+using System.Configuration;
+
+namespace Twingly.Search.Client
+{
+    /// <summary>
+    /// Allows easy access to the configuration settings.
+    /// </summary>
+    internal abstract class Configuration
+    {
+        private readonly string apiKey = null;
+
+        /// <summary>
+        /// Gets the Twingly API key from configuration store
+        /// </summary>
+        public string ApiKey
+        {
+            get
+            {
+                return this.apiKey;
+            }
+        }
+
+        public Configuration()
+        {
+            this.apiKey = ReadApiKeyFromConfig();
+        }
+
+        private string ReadApiKeyFromConfig()
+        {
+            string returnValue = null;
+
+            try
+            {
+                returnValue = ReadConfigValue(Constants.ApiConfigSettingName);
+            }
+
+            catch (Exception ex)
+            {
+                throw new ApiKeyNotFoundException(ex);
+            }
+
+            if (returnValue == null)
+                throw new ApiKeyNotFoundException();
+
+            return returnValue;
+        }
+
+        protected abstract string ReadConfigValue(string key);
+
+    }
+}
