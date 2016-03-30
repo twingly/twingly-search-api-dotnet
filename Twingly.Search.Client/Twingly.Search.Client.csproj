@@ -42,7 +42,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiKeyNotFoundException.cs" />
+    <Compile Include="TwinglyServiceUnavailableException.cs" />
+    <Compile Include="UnauthorizedApiKeyException.cs" />
+    <Compile Include="ApiKeyDoesNotExistException.cs" />
+    <Compile Include="BlogStream.cs" />
+    <Compile Include="OperationResult.cs" />
+    <Compile Include="TwinglyRequestException.cs" />
+    <Compile Include="ApiKeyNotConfiguredException.cs" />
     <Compile Include="FileConfiguration.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Configuration.cs" />

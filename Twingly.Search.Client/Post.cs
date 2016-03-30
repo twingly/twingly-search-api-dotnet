@@ -10,9 +10,6 @@ namespace Twingly.Search.Client
     [XmlRoot(ElementName = "post")]
     public class Post
     {
-        private List<string> tags = null;
-
-        
 
         [XmlElement(ElementName = "url")]
         public string Url { get; set; }

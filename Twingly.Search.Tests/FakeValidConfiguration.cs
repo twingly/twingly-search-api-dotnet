@@ -12,7 +12,7 @@ namespace Twingly.Search.Tests
     {
         protected override string ReadConfigValue(string key)
         {
-            return "";
+            return "S0M3rand0mk3y";
         }
     }
 }

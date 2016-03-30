@@ -37,11 +37,11 @@ namespace Twingly.Search.Client
 
             catch (Exception ex)
             {
-                throw new ApiKeyNotFoundException(ex);
+                throw new ApiKeyNotConfiguredException(ex);
             }
 
             if (returnValue == null)
-                throw new ApiKeyNotFoundException();
+                throw new ApiKeyNotConfiguredException();
 
             return returnValue;
         }

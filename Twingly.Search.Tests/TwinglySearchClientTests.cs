@@ -13,7 +13,7 @@ namespace Twingly.Search.Tests
     public class TwinglySearchClientTests
     {
         [TestMethod]
-        [ExpectedException(typeof(ApiKeyNotFoundException), "Failed to throw an exception when API key is missing from config file.")]
+        [ExpectedException(typeof(ApiKeyNotConfiguredException), "Failed to throw an exception when API key is missing from config file.")]
         public void When_NoApiKeyConfigured_Then_ShouldThrow()
         {
             /// Arrange, Act, Assert, all in one line!
@@ -32,8 +32,8 @@ namespace Twingly.Search.Tests
         public void When_SendingCorrectQuery_ShouldGetResultSuccessfully()
         {
             // Arrange 
-            var client = new TwinglySearchClient(new FakeValidConfiguration(), new HttpClient());
-            var theQuery = QueryBuilder.Create("twingly page-size:5000").Build();
+            var client = new TwinglySearchClient(new FileConfiguration(), new HttpClient());
+            var theQuery = QueryBuilder.Create("audi page-size:5000").Build();
 
             // Act
             QueryResult response = client.Query(theQuery);
@@ -41,6 +41,20 @@ namespace Twingly.Search.Tests
             // Assert
             Assert.IsNotNull(response);
             Assert.IsTrue(response.NumberOfMatchesTotal > 0);
+        }
+
+        [TestMethod]
+        [TestCategory("Integration")]
+        [ExpectedException(typeof(ApiKeyDoesNotExistException),
+            "Failed to recognize and throw an error when using a non-existing API key.")]
+        public void When_UsingInvalidKey_ShouldThrow()
+        {
+            // Arrange 
+            var client = new TwinglySearchClient(new FakeValidConfiguration(), new HttpClient());
+            var theQuery = QueryBuilder.Create("twingly page-size:100").Build();
+
+            // Act, Assert (should throw).
+            QueryResult response = client.Query(theQuery);
         }
     }
 }

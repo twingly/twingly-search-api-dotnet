@@ -13,10 +13,13 @@ namespace Twingly.Search.Client
     {
         [XmlElement(ElementName = "post")]
         public List<Post> Post { get; set; }
+
         [XmlAttribute(AttributeName = "numberOfMatchesReturned")]
         public int NumberOfMatchesReturned { get; set; }
+
         [XmlAttribute(AttributeName = "secondsElapsed")]
         public double SecondsElapsed { get; set; }
+
         [XmlAttribute(AttributeName = "numberOfMatchesTotal")]
         public long NumberOfMatchesTotal { get; set; }
     }

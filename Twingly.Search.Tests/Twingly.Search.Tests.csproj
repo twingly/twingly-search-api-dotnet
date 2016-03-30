@@ -53,8 +53,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="FakeInvalidConfiguration.cs" />
     <Compile Include="FakeValidConfiguration.cs" />
+    <Compile Include="FakeInvalidConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryBuilderTests.cs" />
     <Compile Include="TwinglySearchClientTests.cs" />
@@ -64,6 +64,9 @@
       <Project>{1ca044d7-1edb-487f-9cea-08661eb409ab}</Project>
       <Name>Twingly.Search.Client</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
