@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Twingly.Search.Client
+namespace Twingly.Search.Client.Domain
 {
     /// <summary>
     /// Occurs when an API key is not found in appSettings/TWINGLY_API_KEY

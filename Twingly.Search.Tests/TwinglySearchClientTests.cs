@@ -6,6 +6,8 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Twingly.Search.Client;
+using Twingly.Search.Client.Domain;
+using Twingly.Search.Client.Infrastructure;
 
 namespace Twingly.Search.Tests
 {

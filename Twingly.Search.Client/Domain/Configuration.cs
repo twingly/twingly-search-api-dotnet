@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Configuration;
 
-namespace Twingly.Search.Client
+namespace Twingly.Search.Client.Domain
 {
     /// <summary>
     /// Allows easy access to the configuration settings.

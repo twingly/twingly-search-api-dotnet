@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Twingly.Search.Client
+namespace Twingly.Search.Client.Domain
 {
     /// <summary>
     /// Occurs when there is a server communication error during a request.

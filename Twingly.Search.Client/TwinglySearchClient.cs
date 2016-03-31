@@ -8,6 +8,9 @@ using System.Net.Http;
 using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
+using Twingly.Search.Client.Domain;
+using Twingly.Search.Client.Infrastructure;
+using Configuration = Twingly.Search.Client.Domain.Configuration;
 
 namespace Twingly.Search.Client
 {
@@ -53,6 +56,7 @@ namespace Twingly.Search.Client
             this.internalClient = new HttpClient()
             {
                 BaseAddress = new Uri(Constants.ApiBaseAddress),
+                Timeout = TimeSpan.FromMilliseconds(millisecondsTimeout)
             };
 
             internalClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", UserAgent);
@@ -67,6 +71,8 @@ namespace Twingly.Search.Client
             this.config = clientConfig;
             this.internalClient = client;
             this.internalClient.BaseAddress = new Uri(Constants.ApiBaseAddress);
+            this.internalClient.Timeout = TimeSpan.FromMilliseconds(millisecondsTimeout);
+
             internalClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", UserAgent);
         }
 
@@ -137,7 +143,6 @@ namespace Twingly.Search.Client
             return returnValue;
           
         }
-
 
         private Exception MapResponseToException(string responseString, Exception inner)
         {

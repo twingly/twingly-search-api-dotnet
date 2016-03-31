@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
-namespace Twingly.Search.Client
+namespace Twingly.Search.Client.Infrastructure
 {
     [XmlRoot(ElementName = "blogstream", Namespace = "http://www.twingly.com")]
     public class BlogStream

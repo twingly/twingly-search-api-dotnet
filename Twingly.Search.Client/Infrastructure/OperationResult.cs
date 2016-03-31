@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace Twingly.Search.Client
+namespace Twingly.Search.Client.Infrastructure
 {
     [XmlRoot(ElementName = "operationResult")]
     public class OperationResult

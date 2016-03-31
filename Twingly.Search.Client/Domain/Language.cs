@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
-namespace Twingly.Search.Client
+namespace Twingly.Search.Client.Domain
 {
     /// <summary>
     /// Enumerates all the languages supported by Twingly. 
