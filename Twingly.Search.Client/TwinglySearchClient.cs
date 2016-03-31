@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -69,15 +70,7 @@ namespace Twingly.Search.Client
             internalClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", UserAgent);
         }
 
-        /// <summary>
-        /// Executes <paramref name="theQuery"/> and returns the result synchronously.
-        /// </summary>
-        /// <param name="theQuery">The blog search query that will be sent to the API.</param>
-        /// <returns>
-        /// Result of <paramref name="theQuery"/>.
-        /// </returns>
-        /// <exception cref="TwinglyRequestException">Thrown when a communication error occurs</exception>
-        public QueryResult Query(Query theQuery)
+        public async Task<QueryResult> QueryAsync(Query theQuery)
         {
             if (theQuery == null)
                 throw new ArgumentNullException("theQuery", "Hey, there's no way this argument can be null :(");
@@ -91,15 +84,12 @@ namespace Twingly.Search.Client
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
 
-                Task<Stream> queryStreamTask = this.internalClient.GetStreamAsync(requestUri);
-                queryStreamTask.Wait(millisecondsTimeout);
-
-                sw.Stop();
-                verboseTracer.TraceInformation("Received server response in {0} ms", sw.ElapsedMilliseconds);
-
-                sw.Restart();
-                using (Stream resultStream = queryStreamTask.Result)
+                using (Stream resultStream = 
+                    await this.internalClient.GetStreamAsync(requestUri).ConfigureAwait(false)) // continue on the thread pool to avoid deadlocks
                 {
+                    sw.Stop();
+                    verboseTracer.TraceInformation("Received server response in {0} ms", sw.ElapsedMilliseconds);
+                    sw.Restart();
                     result = resultStream.ReadStreamIntoString();
                 }
 
@@ -109,26 +99,53 @@ namespace Twingly.Search.Client
             }
             catch (Exception ex)
             {
-                throw new TwinglyRequestException(ex);
-            }
-
-            if (returnValue == null)
-            {
-                var wrapperException = MapResponseToException(result);
+                var wrapperException = MapResponseToException(result, ex);
                 throw wrapperException;
             }
 
             return returnValue;
         }
 
+        /// <summary>
+        /// Executes <paramref name="theQuery"/> and returns the result synchronously.
+        /// </summary>
+        /// <param name="theQuery">The blog search query that will be sent to the API.</param>
+        /// <returns>
+        /// Result of <paramref name="theQuery"/>.
+        /// </returns>
+        /// <exception cref="TwinglyServiceUnavailableException">Thrown when the Twingly API reports that service is unavailable.</exception>
+        /// <exception cref="ApiKeyDoesNotExistException">Thrown when the supplied API key was not recognized by the remote server.</exception>
+        /// <exception cref="UnauthorizedApiKeyException">
+        /// Thrown when the supplied API key can't be used to service the query. 
+        /// E.g. when the API key is limited to English language only, while the query was aimed at french blog posts.
+        /// </exception>
+        /// <exception cref="TwinglyRequestException">Thrown when any other communication error occurs.</exception>
+        public QueryResult Query(Query theQuery)
+        {
+            QueryResult returnValue = null;
 
-        private Exception MapResponseToException(string responseString)
+            try
+            {
+                returnValue = QueryAsync(theQuery).Result;
+            }
+            catch(AggregateException asyncEx)
+            {
+                // throw the underlying exception without messing up the stack trace
+                ExceptionDispatchInfo.Capture(asyncEx.InnerException).Throw();
+            }
+
+            return returnValue;
+          
+        }
+
+
+        private Exception MapResponseToException(string responseString, Exception inner)
         {
 
             BlogStream errorResponse = null;
 
             if (String.IsNullOrWhiteSpace(responseString))
-                return new TwinglyRequestException("Twingly API returned an empty response");
+                return new TwinglyRequestException("Twingly API returned an empty response :(", inner);
             try
             {
                 errorResponse = responseString.DeserializeXml<BlogStream>();
@@ -136,27 +153,27 @@ namespace Twingly.Search.Client
             catch (Exception ex)
             {
                 return new TwinglyRequestException
-                    ("Couldn't deserialize API response. See inner exception for details", ex);
+                    ("Couldn't deserialize API response. See the inner exception for details", ex);
             }
 
             if (errorResponse != null)
             {
                 if (errorResponse.Result.Text.Equals(Constants.ServiceUnavailable, StringComparison.InvariantCultureIgnoreCase))
-                    return new TwinglyServiceUnavailableException();
+                    return new TwinglyServiceUnavailableException(inner);
                 else if (errorResponse.Result.Text.Equals(Constants.ApiKeyDoesNotExist, StringComparison.InvariantCultureIgnoreCase))
-                    return new ApiKeyDoesNotExistException();
+                    return new ApiKeyDoesNotExistException(inner);
                 else if (errorResponse.Result.Text.Equals(Constants.UnauthorizedApiKey, StringComparison.InvariantCultureIgnoreCase))
-                    return new UnauthorizedApiKeyException();
+                    return new UnauthorizedApiKeyException(inner);
                 else
                     // since we managed to deserialize into BlogStream, we just don't know what the error is.
                     // This means that it's reasonable not to be afraid that the responseString is too large.
                     // It also shouldn't contain any sensitive data. Hence, including it into the error message is safe.
                     return new TwinglyRequestException
-                        (String.Format("Twingly API returned an unknown error :( Here's what it says: {0}", responseString));
+                        (String.Format("Twingly API returned an unknown error :( Here's what it says: {0}", responseString), inner);
             }
             else
             {
-                return new TwinglyRequestException();
+                return new TwinglyRequestException(inner);
             }
         }
 

@@ -14,5 +14,11 @@ namespace Twingly.Search.Client
 
         }
 
+
+        public UnauthorizedApiKeyException(Exception inner) : base(message: Constants.UnauthorizedApiKey, innerException: inner)
+        {
+
+        }
+
     }
 }

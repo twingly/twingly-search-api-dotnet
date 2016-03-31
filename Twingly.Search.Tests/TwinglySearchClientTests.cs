@@ -33,7 +33,7 @@ namespace Twingly.Search.Tests
         {
             // Arrange 
             var client = new TwinglySearchClient(new FileConfiguration(), new HttpClient());
-            var theQuery = QueryBuilder.Create("audi page-size:5000").Build();
+            var theQuery = QueryBuilder.Create("audi page-size:100").Build();
 
             // Act
             QueryResult response = client.Query(theQuery);
