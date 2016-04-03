@@ -15,17 +15,17 @@ namespace Twingly.Search.Tests
     public class TwinglySearchClientTests
     {
         [TestMethod]
-        [ExpectedException(typeof(ApiKeyNotConfiguredException), "Failed to throw an exception when API key is missing from config file.")]
+        [ExpectedException(typeof(ApiKeyNotConfiguredException), "Failed to throw an exception when an API key is missing from config file.")]
         public void When_NoApiKeyConfigured_Then_ShouldThrow()
         {
-            /// Arrange, Act, Assert, all in one line!
+            // Arrange, Act, Assert, all in one line!
             var client = new TwinglySearchClient(new FakeInvalidConfiguration(), new HttpClient());
         }
 
         [TestMethod]
         public void When_ApiKeyConfigured_Then_ShouldReadSuccessfully()
         {
-            /// Arrange, Act, Assert, all in one line!
+            // Arrange, Act, Assert, all in one line!
             var client = new TwinglySearchClient(new FakeValidConfiguration(), new HttpClient());
         }
 
