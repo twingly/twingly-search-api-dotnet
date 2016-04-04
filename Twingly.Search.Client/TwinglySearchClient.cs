@@ -24,7 +24,6 @@ namespace Twingly.Search.Client
         private readonly Configuration config = null;
         private readonly TraceSource verboseTracer = new TraceSource("TwinglySearchClient") { Switch = { Level = SourceLevels.Verbose} };
         private static readonly string requestFormat = "?key={0}&searchPattern={1}&xmloutputversion=2";
-        private static readonly int millisecondsTimeout = 10000; // TODO: move to configuration file.
 
         private string userAgent =
             String.Format("Twingly Search .NET Client/{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
@@ -40,8 +39,12 @@ namespace Twingly.Search.Client
             }
             set
             {
-                if(!String.IsNullOrWhiteSpace(value))
+                if (!String.IsNullOrWhiteSpace(value))
+                {
                     this.userAgent = value;
+                    internalClient.DefaultRequestHeaders.Remove("User-Agent");
+                    internalClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", UserAgent);
+                }
             }
         }
 
@@ -56,7 +59,7 @@ namespace Twingly.Search.Client
             this.internalClient = new HttpClient()
             {
                 BaseAddress = new Uri(Constants.ApiBaseAddress),
-                Timeout = TimeSpan.FromMilliseconds(millisecondsTimeout)
+                Timeout = TimeSpan.FromMilliseconds(config.RequestTimeoutMilliseconds)
             };
 
             internalClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", UserAgent);
@@ -71,7 +74,7 @@ namespace Twingly.Search.Client
             this.config = clientConfig;
             this.internalClient = client;
             this.internalClient.BaseAddress = new Uri(Constants.ApiBaseAddress);
-            this.internalClient.Timeout = TimeSpan.FromMilliseconds(millisecondsTimeout);
+            this.internalClient.Timeout = TimeSpan.FromMilliseconds(config.RequestTimeoutMilliseconds);
 
             internalClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", UserAgent);
         }
@@ -79,7 +82,7 @@ namespace Twingly.Search.Client
         public async Task<QueryResult> QueryAsync(Query theQuery)
         {
             if (theQuery == null)
-                throw new ArgumentNullException("theQuery", "Hey, there's no way this argument can be null :(");
+                throw new ArgumentNullException(nameof(theQuery), "Hey, there's no way this argument can be null :(");
             theQuery.ThrowIfInvalid();
 
             string requestUri = BuildRequestUriFrom(theQuery);
@@ -148,7 +151,8 @@ namespace Twingly.Search.Client
         {
 
             BlogStream errorResponse = null;
-
+            if(inner is TaskCanceledException)
+                return new TwinglyRequestException("The request has timed out :(", inner);
             if (String.IsNullOrWhiteSpace(responseString))
                 return new TwinglyRequestException("Twingly API returned an empty response :(", inner);
             try
@@ -184,17 +188,20 @@ namespace Twingly.Search.Client
 
         private string BuildRequestUriFrom(Query theQuery)
         {
-            string returnValue = 
+            string initialRequest = 
                 String.Format(requestFormat, this.config.ApiKey, theQuery.SearchPattern);
-            var builder = new StringBuilder(returnValue);
+            var builder = new StringBuilder(initialRequest);
             if (theQuery.Language != null)
-                builder.AppendFormat("documentlang={0}", theQuery.Language.Value.GetLanguageValue());
+                builder.AppendFormat("&{0}={1}", 
+                    Constants.DocumentLanguage, theQuery.Language.Value.GetLanguageValue());
             if (theQuery.StartTime.HasValue)
-                builder.AppendFormat("ts={0}", theQuery.StartTime.Value.ToString(Constants.ApiDateFormat));
+                builder.AppendFormat("&{0}={1}",
+                    Constants.StartTime, theQuery.StartTime.Value.ToString(Constants.ApiDateFormat));
             if (theQuery.EndTime.HasValue)
-                builder.AppendFormat("tsTo={0}", theQuery.EndTime.Value.ToString(Constants.ApiDateFormat));
+                builder.AppendFormat("&{0}={1}",
+                    Constants.EndTime, theQuery.EndTime.Value.ToString(Constants.ApiDateFormat));
 
-            return returnValue;
+            return builder.ToString();
         }
     }
 }

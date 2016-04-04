@@ -8,6 +8,7 @@ namespace Twingly.Search.Client.Domain
     internal abstract class Configuration
     {
         private readonly string apiKey = null;
+        private readonly int requestTimeoutMilliseconds = 10000;
 
         /// <summary>
         /// Gets the Twingly API key from configuration store
@@ -20,9 +21,22 @@ namespace Twingly.Search.Client.Domain
             }
         }
 
+        /// <summary>
+        /// Gets the configured request timeout
+        /// </summary>
+        public int RequestTimeoutMilliseconds
+        {
+            get
+            {
+                return this.requestTimeoutMilliseconds;
+            }
+        }
+
         public Configuration()
         {
             this.apiKey = ReadApiKeyFromConfig();
+            this.requestTimeoutMilliseconds = 
+                ReadRequestTimeoutFromConfig() ?? requestTimeoutMilliseconds;
         }
 
         private string ReadApiKeyFromConfig()
@@ -41,6 +55,25 @@ namespace Twingly.Search.Client.Domain
 
             if (returnValue == null)
                 throw new ApiKeyNotConfiguredException();
+
+            return returnValue;
+        }
+
+        private int? ReadRequestTimeoutFromConfig()
+        {
+            int? returnValue = null;
+
+            try
+            {
+                int convertedValue = 0;
+                if (Int32.TryParse(ReadConfigValue(Constants.TimeoutConfigSettingName), out convertedValue))
+                    returnValue = convertedValue;
+            }
+
+            catch (Exception)
+            {
+                // handle gracefully, we'll use a default value.
+            }
 
             return returnValue;
         }

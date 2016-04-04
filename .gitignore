@@ -54,3 +54,4 @@ Temporary Items
 .apdisk
 *.suo
 Twingly.Search.Tests/App.config
+*.user

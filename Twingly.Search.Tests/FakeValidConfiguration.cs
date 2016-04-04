@@ -13,7 +13,14 @@ namespace Twingly.Search.Tests
     {
         protected override string ReadConfigValue(string key)
         {
-            return "S0M3rand0mk3y";
+            if(key.Equals(Constants.ApiConfigSettingName))
+                return "S0M3rand0mk3y";
+            if (key.Equals(Constants.TimeoutConfigSettingName))
+                return "500";
+            else
+            {
+                throw new InvalidOperationException("This key value is unsupported");
+            }
         }
     }
 }
