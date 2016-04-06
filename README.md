@@ -42,7 +42,7 @@ Fetch docs about "Slack" published since yesterday. Limit results to 10 posts.
     }
 
 ```
-To learn more about the features of this client, check out the example code that can be found in [Twingly.Search.Samples](Twingly.Search.Samples).
+To learn more about the features of this client, check out the example code in [Twingly.Search.Samples](Twingly.Search.Samples).
 
 ### Exception handling
 
