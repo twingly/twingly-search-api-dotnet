@@ -7,7 +7,7 @@
 
 * [Required] Set API key in the appSettings section of your config file:
 
-```.NET
+```cs
 
   <appSettings>
     <add key="TWINGLY_API_KEY" value="YOUR_KEY_GOES_HERE"/>
@@ -16,7 +16,7 @@
 ```
 
 * [Optional] Set request timeout. The default timeout value is 10 seconds.
-```.NET
+```cs
 
   <appSettings>
     <add key="TWINGLY_TIMEOUT_MS" value="REQUEST_TIMEOUT_IN_MILLISECONDS"/>
@@ -27,7 +27,7 @@
 ## Example usage
 Fetch docs about "Slack" published since yesterday. Limit results to 10 posts.
 
-```.NET
+```cs
 
     Query theQuery = QueryBuilder.Create("Slack page-size:10")
                                         .StartTime(DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)))
