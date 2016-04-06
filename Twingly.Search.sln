@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twingly.Search.Client", "Tw
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twingly.Search.Tests", "Twingly.Search.Tests\Twingly.Search.Tests.csproj", "{966396FC-4EB1-46FF-B109-AE546256C473}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Twingly.Search.Samples", "Twingly.Search.Samples\Twingly.Search.Samples.csproj", "{6A1BE79E-4A7F-4537-BF4A-9C1DA88D6FC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{966396FC-4EB1-46FF-B109-AE546256C473}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{966396FC-4EB1-46FF-B109-AE546256C473}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{966396FC-4EB1-46FF-B109-AE546256C473}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A1BE79E-4A7F-4537-BF4A-9C1DA88D6FC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A1BE79E-4A7F-4537-BF4A-9C1DA88D6FC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A1BE79E-4A7F-4537-BF4A-9C1DA88D6FC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A1BE79E-4A7F-4537-BF4A-9C1DA88D6FC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

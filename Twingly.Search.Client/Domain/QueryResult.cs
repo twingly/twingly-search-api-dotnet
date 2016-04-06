@@ -8,7 +8,7 @@ namespace Twingly.Search.Client.Domain
     public class QueryResult
     {
         [XmlElement(ElementName = "post")]
-        public List<Post> Post { get; set; }
+        public List<Post> Posts { get; set; }
 
         [XmlAttribute(AttributeName = "numberOfMatchesReturned")]
         public int NumberOfMatchesReturned { get; set; }

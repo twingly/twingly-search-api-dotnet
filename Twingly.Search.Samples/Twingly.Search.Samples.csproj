@@ -4,15 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1CA044D7-1EDB-487F-9CEA-08661EB409AB}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{6A1BE79E-4A7F-4537-BF4A-9C1DA88D6FC5}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Twingly.Search.Client</RootNamespace>
-    <AssemblyName>Twingly.Search.Client</AssemblyName>
+    <RootNamespace>Twingly.Search.Samples</RootNamespace>
+    <AssemblyName>Twingly.Search.Samples</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -31,9 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -42,27 +43,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domain\ApiKeyDoesNotExistException.cs" />
-    <Compile Include="Domain\ApiKeyNotConfiguredException.cs" />
-    <Compile Include="Domain\Configuration.cs" />
-    <Compile Include="Domain\Constants.cs" />
-    <Compile Include="Domain\Language.cs" />
-    <Compile Include="Domain\Post.cs" />
-    <Compile Include="Domain\Query.cs" />
-    <Compile Include="Domain\QueryResult.cs" />
-    <Compile Include="Domain\TwinglyRequestException.cs" />
-    <Compile Include="Domain\TwinglyServiceUnavailableException.cs" />
-    <Compile Include="Domain\UnauthorizedApiKeyException.cs" />
-    <Compile Include="Infrastructure\BlogStream.cs" />
-    <Compile Include="Infrastructure\Extensions.cs" />
-    <Compile Include="Infrastructure\FileConfiguration.cs" />
-    <Compile Include="Infrastructure\OperationResult.cs" />
-    <Compile Include="ITwinglySearchClient.cs" />
+    <Compile Include="FindPostsSinceYesterdayExample.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="QueryBuilder.cs" />
-    <Compile Include="TwinglySearchClient.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Twingly.Search.Client\Twingly.Search.Client.csproj">
+      <Project>{1ca044d7-1edb-487f-9cea-08661eb409ab}</Project>
+      <Name>Twingly.Search.Client</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
