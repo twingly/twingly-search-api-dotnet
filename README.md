@@ -1,20 +1,58 @@
 # twingly-search-api-dotnet
-.NET client for Twingly Search API (previously known as Twingly Analytics API). Twingly is a blog search service that provides a searchable API known as [Twingly Search API](https://developer.twingly.com/resources/search/).
+.NET client for Twingly Search API (previously known as Twingly Analytics API). Twingly is a blog search service that provides [a searchable API](https://developer.twingly.com/resources/search/).
 
 ![Build status](https://ci.appveyor.com/api/projects/status/gljbvg2ds257o6jw?svg=true)
 
 ## Configuration
 
-* Set API key in the app.config/appSettings section:
+* [Required] Set API key in the appSettings section of your config file:
 
 ```.NET
 
   <appSettings>
-    <add key="TWINGLY_API_KEY" value=""/>
+    <add key="TWINGLY_API_KEY" value="YOUR_KEY_GOES_HERE"/>
   </appSettings>
 
 ```
 
+* [Optional] Set request timeout. The default timeout value is 10 seconds.
+```.NET
+
+  <appSettings>
+    <add key="TWINGLY_TIMEOUT_MS" value="REQUEST_TIMEOUT_IN_MILLISECONDS"/>
+  </appSettings>
+
+```
+
+## Example usage
+Fetch docs about "Slack" published since yesterday. Limit results to 10 posts.
+
+```.NET
+
+    Query theQuery = QueryBuilder.Create("Slack page-size:10")
+                                        .StartTime(DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)))
+                                        .Build();
+
+    ITwinglySearchClient client = new TwinglySearchClient();
+    QueryResult matchingDocs = client.Query(theQuery);
+    foreach (var post in matchingDocs.Posts)
+    {
+        Console.WriteLine("Title: '{0}', Date: '{1}', Url: '{2}'",
+        doc.Title, doc.Published, doc.Url);
+    }
+
+```
+To learn more about the features of this client, check out the example code that can be found in [Twingly.Search.Samples](Twingly.Search.Samples).
+
+### Exception handling
+
+Client exceptions are organized into the following hierachy:
+* TwinglyRequestException - base class for any Twingly-related exception
+    * ApiKeyDoesNotExistException - thrown when no API key was found;
+    * UnauthorizedApiKeyException - thrown when API key is not authorized for the action being performed;
+    * TwinglyServiceUnavailableException - thrown when service is not available;
+    * ApiKeyNotConfiguredException - thrown when an API key was not found in the config file.
+        
 ## License
 
 The MIT License (MIT)
