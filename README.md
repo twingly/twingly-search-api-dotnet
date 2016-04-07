@@ -55,7 +55,7 @@ Client exceptions are organized into the following hierachy:
 
 The MIT License (MIT)
 
-Copyright (c) 2012-2016 Twingly AB
+Copyright (c) 2012-2016 Andrey Mironoff, Twingly AB
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
