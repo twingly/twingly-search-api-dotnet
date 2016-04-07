@@ -203,7 +203,7 @@ namespace Twingly.Search.Client
         private string BuildRequestUriFrom(Query theQuery)
         {
             string initialRequest = 
-                String.Format(requestFormat, this.config.ApiKey, theQuery.SearchPattern);
+                String.Format(requestFormat, this.config.ApiKey, Uri.EscapeDataString(theQuery.SearchPattern));
             var builder = new StringBuilder(initialRequest);
             if (theQuery.Language != null)
                 builder.AppendFormat("&{0}={1}", 

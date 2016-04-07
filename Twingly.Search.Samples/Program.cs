@@ -11,6 +11,7 @@ namespace Twingly.Search.Samples
         static void Main(string[] args)
         {
             FindPostsSinceYesterdayExample.RunExample();
+            AdvancedQueryLanguageExample.RunExample();
 
             Console.WriteLine("Press any key to continue...");
             Console.Read();
