@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Twingly AB")]
 [assembly: AssemblyProduct("Twingly.Search.Client")]
-[assembly: AssemblyCopyright("Copyright © Andrey Mironoff 2016")]
+[assembly: AssemblyCopyright("Copyright © 2016 Andrey Mironoff, Twingly AB")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: InternalsVisibleTo("Twingly.Search.Tests")]
