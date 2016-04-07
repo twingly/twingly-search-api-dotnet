@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Twingly.Search.Client")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription(".NET client for the Twingly Search API. Twingly is a blog search service that provides a searchable API.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Twingly AB")]
 [assembly: AssemblyProduct("Twingly.Search.Client")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCopyright("Copyright © Andrey Mironoff 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: InternalsVisibleTo("Twingly.Search.Tests")]

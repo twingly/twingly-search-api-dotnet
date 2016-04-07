@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
+    <projectUrl>https://github.com/amironoff/twingly-search-api-dotnet</projectUrl>
+    <iconUrl>https://twingly.files.wordpress.com/2015/01/download.png?w=180</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>$description$</description>
+    <copyright>Copyright © Andrey Mironoff 2016</copyright>
+    <tags>Twingly</tags>
+  </metadata>
+</package>
