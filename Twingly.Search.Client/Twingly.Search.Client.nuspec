@@ -14,4 +14,7 @@
     <copyright>Copyright © 2016 Andrey Mironoff, Twingly AB</copyright>
     <tags>Twingly</tags>
   </metadata>
+  <files>
+    <file src="bin\$configuration$\$id$.XmlSerializers.dll" target="lib/net452" />
+  </files>
 </package>
