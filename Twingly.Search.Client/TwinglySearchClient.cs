@@ -92,7 +92,7 @@ namespace Twingly.Search.Client
         /// Thrown when the supplied API key can't be used to service the query. 
         /// E.g. when the API key is limited to English language only, while the query was aimed at french blog posts.
         /// </exception>
-        /// <exception cref="TwinglyRequestException">Thrown when any other communication error occurs.</exception>
+        /// <exception cref="TwinglyRequestException">Thrown when any other error occurs.</exception>
         public async Task<QueryResult> QueryAsync(Query theQuery)
         {
             if (theQuery == null)
@@ -142,7 +142,7 @@ namespace Twingly.Search.Client
         /// Thrown when the supplied API key can't be used to service the query. 
         /// E.g. when the API key is limited to English language only, while the query was aimed at french blog posts.
         /// </exception>
-        /// <exception cref="TwinglyRequestException">Thrown when any other communication error occurs.</exception>
+        /// <exception cref="TwinglyRequestException">Thrown when any other error occurs.</exception>
         public QueryResult Query(Query theQuery)
         {
             QueryResult returnValue = null;

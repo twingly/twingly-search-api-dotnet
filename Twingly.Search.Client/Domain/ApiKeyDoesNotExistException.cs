@@ -2,6 +2,8 @@
 
 namespace Twingly.Search.Client.Domain
 {
+    /// <summary>
+    /// </summary>
     public class ApiKeyDoesNotExistException : TwinglyRequestException
     {
         public ApiKeyDoesNotExistException() : base(message: Constants.ApiKeyDoesNotExist)

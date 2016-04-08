@@ -2,6 +2,9 @@
 
 namespace Twingly.Search.Client.Domain
 {
+    /// <summary>
+    /// Thrown when the Search API is not available to service the request.
+    /// </summary>
     public class TwinglyServiceUnavailableException : TwinglyRequestException
     {
 

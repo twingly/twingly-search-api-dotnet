@@ -76,7 +76,7 @@ namespace Twingly.Search.Client.Domain
             // the delay between forming a query and the server actually receiving it.
             if (startTime > DateTime.UtcNow.AddHours(1))
                 throw new ArgumentOutOfRangeException
-                    ("startTime", "Start time must be a UTC point in the past.");
+                    (nameof(startTime), "Start time must be a UTC point in the past.");
         }
 
         internal void ThrowIfNotAValidEndTime(DateTime endTime)
@@ -84,7 +84,7 @@ namespace Twingly.Search.Client.Domain
 
             if (this.StartTime.HasValue && endTime < this.StartTime)
                 throw new ArgumentOutOfRangeException
-                    ("endTime", "End time must be a UTC point in time that comes after the StartTime");
+                    (nameof(endTime), "End time must be a UTC point in time that comes after the StartTime");
         }
 
         internal void ThrowIfInvalid()

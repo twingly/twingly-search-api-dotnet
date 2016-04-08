@@ -2,6 +2,9 @@
 
 namespace Twingly.Search.Client.Domain
 {
+    /// <summary>
+    /// Thrown when the supplied API key cannot be used to service the request.
+    /// </summary>
     public class UnauthorizedApiKeyException : TwinglyRequestException
     {
 
