@@ -3,6 +3,7 @@
 namespace Twingly.Search.Client.Domain
 {
     /// <summary>
+    /// Thrown when the API couldn't recognize the supplied API key.
     /// </summary>
     public class ApiKeyDoesNotExistException : TwinglyRequestException
     {
