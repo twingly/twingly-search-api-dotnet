@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Xml.Serialization;
 
 namespace Twingly.Search.Client.Domain
@@ -40,14 +42,36 @@ namespace Twingly.Search.Client.Domain
         /// If no publication date could be found in the post,
         /// the date will be set to when the post was indexed.
         /// </summary>
+        [XmlIgnore]
+        public DateTime? Published
+        {
+            get
+            {
+                return SerializerBackingStringFieldPublished != null
+                    ? (DateTime?)DateTime.Parse(SerializerBackingStringFieldPublished, null, DateTimeStyles.AdjustToUniversal)
+                    : null;
+            }
+        }
+
         [XmlElement(ElementName = "published")]
-        public string Published { get; set; }
+        public string SerializerBackingStringFieldPublished { get; set; }
 
         /// <summary>
         /// When Twingly indexed the post, in UTC.
         /// </summary>
+        [XmlIgnore]
+        public DateTime? Indexed
+        {
+            get
+            {
+                return SerializerBackingStringFieldIndexed != null
+                    ? (DateTime?)DateTime.Parse(SerializerBackingStringFieldIndexed, null, DateTimeStyles.AdjustToUniversal)
+                    : null;
+            }
+        }
+
         [XmlElement(ElementName = "indexed")]
-        public string Indexed { get; set; }
+        public string SerializerBackingStringFieldIndexed { get; set; }
 
         /// <summary>
         /// The url to the blog.
@@ -66,14 +90,14 @@ namespace Twingly.Search.Client.Domain
         /// <see cref="https://developer.twingly.com/resources/ranking#authority"/>
         /// </summary>
         [XmlElement(ElementName = "authority")]
-        public string Authority { get; set; }
+        public double Authority { get; set; }
 
         /// <summary>
         /// Indicates how influential the blog is, at time of indexing,
         /// <see cref="https://developer.twingly.com/resources/ranking#blogrank"/>.
         /// </summary>
         [XmlElement(ElementName = "blogRank")]
-        public string BlogRank { get; set; }
+        public double BlogRank { get; set; }
 
         /// <summary>
         /// The categories and tags used to describe the blog post.

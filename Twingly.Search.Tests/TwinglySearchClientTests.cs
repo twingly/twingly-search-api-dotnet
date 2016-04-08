@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -86,6 +87,45 @@ namespace Twingly.Search.Tests
             Assert.AreEqual(validQuery.Language.Value.GetLanguageValue(), serializedParameters[Constants.DocumentLanguage]);
             Assert.IsNotNull(client.UserAgent);
             Assert.AreEqual(client.UserAgent, requestMessage.Headers.UserAgent.ToString());
+        }
+
+        [TestMethod]
+        public void When_ResponseIsSuccessful_Then_ShouldDeserialize()
+        {
+            // Arrange 
+            HttpRequestMessage requestMessage = null;
+            int expectedPostCount = 5;
+            double expectedSecondsElapsed = 0.236;
+            int expectedNumberOfMatchesTotal = 190596;
+            string expectedLanguageCode = "en";
+            DateTime expectedPublished = DateTime.Parse("2016-04-04 12:39:09Z", null, DateTimeStyles.AdjustToUniversal);
+            DateTime expectedIndexed = DateTime.Parse("2016-04-04 12:42:23Z",null, DateTimeStyles.AdjustToUniversal);
+            int expectedTagCount = 2;
+            int expectedRank = 1;
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("SuccessfulApiResponse.5posts.xml", request => requestMessage = request);
+            Query validQuery = QueryBuilder
+                                .Create("A valid query")
+                                .Build();
+
+            // Act
+            QueryResult result = client.Query(validQuery);
+            Post secondPost = result.Posts.ElementAt(1);
+
+            // Assert
+            Assert.AreEqual(expectedPostCount, result.Posts.Count);
+            Assert.AreEqual(expectedSecondsElapsed, result.SecondsElapsed);
+            Assert.AreEqual(expectedNumberOfMatchesTotal, result.NumberOfMatchesTotal);
+            Assert.AreEqual(expectedLanguageCode, secondPost.LanguageCode);
+            Assert.AreEqual(expectedPublished, secondPost.Published);
+            Assert.AreEqual(expectedIndexed, secondPost.Indexed);
+            Assert.AreEqual(expectedRank, secondPost.BlogRank);
+            Assert.AreEqual(expectedRank, secondPost.Authority);
+            Assert.AreEqual(expectedTagCount, secondPost.Tags.Count);
+            Assert.IsTrue(!String.IsNullOrWhiteSpace(secondPost.Url));
+            Assert.IsTrue(!String.IsNullOrWhiteSpace(secondPost.Title));
+            Assert.IsTrue(!String.IsNullOrWhiteSpace(secondPost.Summary));
+            Assert.IsTrue(!String.IsNullOrWhiteSpace(secondPost.BlogUrl));
+            Assert.IsTrue(!String.IsNullOrWhiteSpace(secondPost.BlogName));
         }
 
         [TestMethod]

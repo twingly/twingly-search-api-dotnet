@@ -14,6 +14,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: InternalsVisibleTo("Twingly.Search.Tests")]
+[assembly: InternalsVisibleTo("Twingly.Search.Client.XmlSerializers")]
+[assembly: InternalsVisibleTo("Twingly.Search.Client.XmlSerializers.dll")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
