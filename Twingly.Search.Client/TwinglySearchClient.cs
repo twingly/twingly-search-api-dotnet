@@ -21,7 +21,7 @@ namespace Twingly.Search.Client
     {
         private readonly HttpClient internalClient = null;
         private readonly TwinglyConfiguration config = null;
-        private readonly TraceSource verboseTracer = new TraceSource("TwinglySearchClient") { Switch = { Level = SourceLevels.Verbose} };
+        private readonly TraceSource verboseTracer = new TraceSource("TwinglySearchClient") { Switch = { Level = SourceLevels.Off} };
         private static readonly string requestFormat = "?key={0}&searchpattern={1}&xmloutputversion=2";
 
         private string userAgent =
