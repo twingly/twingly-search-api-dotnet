@@ -12,7 +12,7 @@
         public static readonly string DocumentLanguage = "documentlang";
         public static readonly string StartTime = "ts";
         public static readonly string EndTime = "tsTo"; 
-        public static readonly string SearchPattern = "searchPattern";
+        public static readonly string SearchPattern = "searchpattern";
         public static readonly int DefaultTimeout = 10000; // 10 seconds.
     }
 }
