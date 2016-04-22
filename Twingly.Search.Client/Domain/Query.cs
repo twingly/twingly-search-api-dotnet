@@ -22,7 +22,7 @@ namespace Twingly.Search.Client.Domain
                 return searchPattern;
             }
 
-            internal set
+            set
             {
                 if (String.IsNullOrWhiteSpace(value))
                     throw new ArgumentOutOfRangeException
