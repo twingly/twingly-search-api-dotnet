@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Twingly.Search.Client.Domain;
 using Twingly.Search.Client.Infrastructure;
-using Configuration = Twingly.Search.Client.Domain.Configuration;
 
 namespace Twingly.Search.Client
 {
@@ -21,7 +20,7 @@ namespace Twingly.Search.Client
     public class TwinglySearchClient : ITwinglySearchClient
     {
         private readonly HttpClient internalClient = null;
-        private readonly Configuration config = null;
+        private readonly TwinglyConfiguration config = null;
         private readonly TraceSource verboseTracer = new TraceSource("TwinglySearchClient") { Switch = { Level = SourceLevels.Verbose} };
         private static readonly string requestFormat = "?key={0}&searchPattern={1}&xmloutputversion=2";
 
@@ -53,7 +52,16 @@ namespace Twingly.Search.Client
         /// Initializes a new instance of <see cref="TwinglySearchClient"/>
         /// with the API key configured in the application configuration file.
         /// </summary>
-        public TwinglySearchClient()
+        public TwinglySearchClient():this(new FileConfiguration())
+        {
+           
+        }
+
+        /// <summary>
+        /// Initializes a new instance of <see cref="TwinglySearchClient"/>
+        /// with the given <paramref name="config"/>
+        /// </summary>
+        public TwinglySearchClient(TwinglyConfiguration config)
         {
             this.config = new FileConfiguration();
             this.internalClient = new HttpClient()
@@ -69,7 +77,7 @@ namespace Twingly.Search.Client
         /// Initializes a new instance of <see cref="TwinglySearchClient"/>.
         /// Intended for automated testing only.
         /// </summary>
-        internal TwinglySearchClient(Configuration clientConfig, HttpClient client)
+        internal TwinglySearchClient(TwinglyConfiguration clientConfig, HttpClient client)
         {
             this.config = clientConfig;
             this.internalClient = client;

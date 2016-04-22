@@ -1,5 +1,6 @@
-﻿using System.Configuration;
-using Configuration = Twingly.Search.Client.Domain.Configuration;
+﻿using System;
+using System.Configuration;
+using Twingly.Search.Client.Domain;
 
 namespace Twingly.Search.Client.Infrastructure
 {
@@ -7,13 +8,59 @@ namespace Twingly.Search.Client.Infrastructure
     /// Allows easy access to the configuration settings
     /// stored in the config file.
     /// </summary>
-    internal class FileConfiguration : Configuration
+    public class FileConfiguration : TwinglyConfiguration
     {
-       public FileConfiguration() : base() { }
-
-        protected override string ReadConfigValue(string key)
+        /// <summary>
+        /// Initializes a new configuration with the settings
+        /// configured in the application configuration file.
+        /// </summary>
+        public FileConfiguration():base(ReadApiKeyFromConfig(), ReadRequestTimeoutFromConfig())
         {
-            return ConfigurationManager.AppSettings.Get(key);
+            
         }
+
+        private static string ReadApiKeyFromConfig()
+        {
+            string returnValue = null;
+
+            try
+            {
+                returnValue = 
+                    ConfigurationManager.AppSettings.Get(Constants.ApiConfigSettingName);
+            }
+
+            catch (Exception ex)
+            {
+                throw new ApiKeyNotConfiguredException(ex);
+            }
+
+            if (returnValue == null)
+                throw new ApiKeyNotConfiguredException();
+
+            return returnValue;
+        }
+
+        private static int ReadRequestTimeoutFromConfig()
+        {
+            int? returnValue = null;
+
+            try
+            {
+                int convertedValue = 0;
+                string timeoutValue = ConfigurationManager.AppSettings.Get(Constants.TimeoutConfigSettingName);
+                returnValue = Int32.TryParse(timeoutValue, out convertedValue) 
+                    ? convertedValue 
+                    : Constants.DefaultTimeout;
+            }
+
+            catch (Exception)
+            {
+                // handle gracefully, we'll use a default value.
+                returnValue = Constants.DefaultTimeout;
+            }
+
+            return returnValue.Value;
+        }
+
     }
 }

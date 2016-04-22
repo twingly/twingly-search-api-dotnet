@@ -56,7 +56,6 @@
   <ItemGroup>
     <Compile Include="DelegatingHttpClientHandler.cs" />
     <Compile Include="FakeValidConfiguration.cs" />
-    <Compile Include="FakeInvalidConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryBuilderTests.cs" />
     <Compile Include="TwinglySearchClientTests.cs" />

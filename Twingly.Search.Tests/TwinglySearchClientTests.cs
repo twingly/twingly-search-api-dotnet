@@ -19,14 +19,6 @@ namespace Twingly.Search.Tests
     [DeploymentItem(@"TestData")]
     public class TwinglySearchClientUnitTests
     {
-        [TestMethod]
-        [ExpectedException(typeof (ApiKeyNotConfiguredException),
-            "Failed to throw an exception when an API key is missing from config file.")]
-        public void When_NoApiKeyConfigured_Then_ShouldThrow()
-        {
-            // Arrange, Act, Assert, all in one line!
-            var client = new TwinglySearchClient(new FakeInvalidConfiguration(), new HttpClient());
-        }
 
         [TestMethod]
         public void When_ApiKeyConfigured_Then_ShouldReadSuccessfully()
@@ -195,10 +187,11 @@ namespace Twingly.Search.Tests
         public void When_RequestTimesOut_Then_ShouldThrow()
         {
             // Arrange
-            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("ServiceUnavailableResponse.xml", request => { Thread.Sleep(700); });
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("ServiceUnavailableResponse.xml", request => { Thread.Sleep(750); });
             Query validQuery = QueryBuilder
                                 .Create("A valid query")
                                 .Build();
+
             // Act & Assert
             client.Query(validQuery);
         }
