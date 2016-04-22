@@ -6,15 +6,15 @@ namespace Twingly.Search.Client.Infrastructure
 {
     /// <summary>
     /// Allows easy access to the configuration settings
-    /// stored in the config file.
+    /// stored in the application config file or environment variables.
     /// </summary>
-    public class FileConfiguration : TwinglyConfiguration
+    public class LocalConfiguration : TwinglyConfiguration
     {
         /// <summary>
         /// Initializes a new configuration with the settings
-        /// configured in the application configuration file.
+        /// configured in the application config file (primary source) or in environment variables (fallback source).
         /// </summary>
-        public FileConfiguration():base(ReadApiKeyFromConfig(), ReadRequestTimeoutFromConfig())
+        public LocalConfiguration():base(ReadApiKeyFromConfig(), ReadRequestTimeoutFromConfig())
         {
             
         }
@@ -25,8 +25,7 @@ namespace Twingly.Search.Client.Infrastructure
 
             try
             {
-                returnValue = 
-                    ConfigurationManager.AppSettings.Get(Constants.ApiConfigSettingName);
+                returnValue = ReadConfigValue(Constants.ApiConfigSettingName);
             }
 
             catch (Exception ex)
@@ -34,7 +33,7 @@ namespace Twingly.Search.Client.Infrastructure
                 throw new ApiKeyNotConfiguredException(ex);
             }
 
-            if (returnValue == null)
+            if (String.IsNullOrWhiteSpace(returnValue))
                 throw new ApiKeyNotConfiguredException();
 
             return returnValue;
@@ -47,7 +46,7 @@ namespace Twingly.Search.Client.Infrastructure
             try
             {
                 int convertedValue = 0;
-                string timeoutValue = ConfigurationManager.AppSettings.Get(Constants.TimeoutConfigSettingName);
+                string timeoutValue = ReadConfigValue(Constants.TimeoutConfigSettingName);
                 returnValue = Int32.TryParse(timeoutValue, out convertedValue) 
                     ? convertedValue 
                     : Constants.DefaultTimeout;
@@ -60,6 +59,16 @@ namespace Twingly.Search.Client.Infrastructure
             }
 
             return returnValue.Value;
+        }
+
+        private static string ReadConfigValue(string key)
+        {
+            string returnValue =
+                ConfigurationManager.AppSettings.Get(key);
+            if (String.IsNullOrWhiteSpace(returnValue))
+                returnValue = Environment.GetEnvironmentVariable(key);
+
+            return returnValue;
         }
 
     }

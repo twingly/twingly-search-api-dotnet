@@ -52,7 +52,7 @@ namespace Twingly.Search.Client
         /// Initializes a new instance of <see cref="TwinglySearchClient"/>
         /// with the API key configured in the application configuration file.
         /// </summary>
-        public TwinglySearchClient():this(new FileConfiguration())
+        public TwinglySearchClient():this(new LocalConfiguration())
         {
            
         }
@@ -63,7 +63,7 @@ namespace Twingly.Search.Client
         /// </summary>
         public TwinglySearchClient(TwinglyConfiguration config)
         {
-            this.config = new FileConfiguration();
+            this.config = new LocalConfiguration();
             this.internalClient = new HttpClient()
             {
                 BaseAddress = new Uri(Constants.ApiBaseAddress),

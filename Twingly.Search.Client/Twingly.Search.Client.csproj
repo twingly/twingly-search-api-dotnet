@@ -55,7 +55,7 @@
     <Compile Include="Domain\UnauthorizedApiKeyException.cs" />
     <Compile Include="Infrastructure\BlogStream.cs" />
     <Compile Include="Infrastructure\Extensions.cs" />
-    <Compile Include="Infrastructure\FileConfiguration.cs" />
+    <Compile Include="Infrastructure\LocalConfiguration.cs" />
     <Compile Include="Infrastructure\OperationResult.cs" />
     <Compile Include="ITwinglySearchClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -9,9 +9,10 @@ namespace Twingly.Search.Client.Domain
     public class ApiKeyNotConfiguredException : Exception
     {
         private static readonly string errorMessage =
-            String.Format("Oops, couldn't find an API key in the application configuration file."
-                            + "Please place a valid API key in the appSettings section, "
-                            + "using '{0}' as the setting name.", Constants.ApiConfigSettingName);
+            String.Format("Oops, couldn't find an API key. "
+                            + "Please place a valid API key in the appSettings section of the configuration file "
+                            + "OR create an environment variable, "
+                            + "using '{0}' as the key.", Constants.ApiConfigSettingName);
 
         public ApiKeyNotConfiguredException(): base(errorMessage) { }
 

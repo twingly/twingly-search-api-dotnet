@@ -229,7 +229,7 @@ namespace Twingly.Search.Tests
         public void When_SendingCorrectQuery_ShouldGetResultSuccessfully()
         {
             // Arrange 
-            var client = new TwinglySearchClient(new FileConfiguration(), new HttpClient());
+            var client = new TwinglySearchClient(new LocalConfiguration(), new HttpClient());
             var theQuery = QueryBuilder.Create("audi page-size:100").Build();
 
             // Act
