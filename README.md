@@ -8,7 +8,7 @@
 ```cs
 
   <appSettings>
-    <add key="TWINGLY_API_KEY" value="YOUR_KEY_GOES_HERE"/>
+    <add key="TWINGLY_SEARCH_KEY" value="YOUR_KEY_GOES_HERE"/>
   </appSettings>
 
 ```
@@ -21,6 +21,8 @@
   </appSettings>
 
 ```
+
+* Alternatively: Set these settings in the environment variables. The settings are first read from configuration, then from the environment variables.
 
 ## Example usage
 Fetch docs about "Slack" published since yesterday. Limit results to 10 posts.
@@ -50,6 +52,10 @@ Client exceptions are organized into the following hierachy:
     * UnauthorizedApiKeyException - thrown when API key is not authorized for the action being performed;
     * TwinglyServiceUnavailableException - thrown when service is not available;
     * ApiKeyNotConfiguredException - thrown when an API key was not found in the config file.
+
+### Requirements
+* API key, contact sales@twingly.com via twingly.com to get one.
+* .NET Framework v4.5.2 
         
 ## License
 
