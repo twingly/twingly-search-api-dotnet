@@ -12,7 +12,7 @@ namespace Twingly.Search.Client.Domain
 
         }
 
-        public ApiKeyDoesNotExistException(Exception inner) : base(message: Constants.UnauthorizedApiKey, innerException: inner)
+        public ApiKeyDoesNotExistException(Exception inner) : base(message: Constants.ApiKeyDoesNotExist, innerException: inner)
         {
 
         }
