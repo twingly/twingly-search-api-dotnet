@@ -2,7 +2,7 @@
 {
     internal static class Constants
     {
-        public static readonly string ApiConfigSettingName = "TWINGLY_API_KEY";
+        public static readonly string ApiConfigSettingName = "TWINGLY_SEARCH_KEY";
         public static readonly string TimeoutConfigSettingName = "TWINGLY_TIMEOUT_MS"; 
         public static readonly string ApiBaseAddress = "https://api.twingly.com/analytics/Analytics.ashx";
         public static readonly string ApiDateFormat = "yyyy-MM-dd HH:mm:ss";
