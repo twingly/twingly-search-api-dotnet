@@ -76,7 +76,7 @@ namespace Twingly.Search.Tests
             Assert.AreEqual(validQuery.SearchPattern, serializedParameters[Constants.SearchPattern]);
             Assert.AreEqual(validQuery.StartTime.Value.ToString(Constants.ApiDateFormat), serializedParameters[Constants.StartTime]);
             Assert.AreEqual(validQuery.EndTime.Value.ToString(Constants.ApiDateFormat), serializedParameters[Constants.EndTime]);
-            Assert.AreEqual(validQuery.Language.Value.GetLanguageValue(), serializedParameters[Constants.DocumentLanguage]);
+            Assert.AreEqual(validQuery.Language, serializedParameters[Constants.DocumentLanguage]);
             Assert.IsNotNull(client.UserAgent);
             Assert.AreEqual(client.UserAgent, requestMessage.Headers.UserAgent.ToString());
         }

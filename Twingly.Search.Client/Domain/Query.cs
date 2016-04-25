@@ -49,8 +49,10 @@ namespace Twingly.Search.Client.Domain
             set;
         }
 
-
-        public Language? Language
+        /// <summary>
+        /// Gets or sets the language filter to be used during search.
+        /// </summary>
+        public string Language
         {
             get;
             set;

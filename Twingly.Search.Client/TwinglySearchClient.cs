@@ -213,9 +213,9 @@ namespace Twingly.Search.Client
             string initialRequest = 
                 String.Format(requestFormat, this.config.ApiKey, Uri.EscapeDataString(theQuery.SearchPattern));
             var builder = new StringBuilder(initialRequest);
-            if (theQuery.Language != null)
+            if (!String.IsNullOrWhiteSpace(theQuery.Language))
                 builder.AppendFormat("&{0}={1}", 
-                    Constants.DocumentLanguage, theQuery.Language.Value.GetLanguageValue());
+                    Constants.DocumentLanguage, theQuery.Language);
             if (theQuery.StartTime.HasValue)
                 builder.AppendFormat("&{0}={1}",
                     Constants.StartTime, theQuery.StartTime.Value.ToString(Constants.ApiDateFormat));

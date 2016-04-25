@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Twingly.Search.Client.Domain;
+using Twingly.Search.Client.Infrastructure;
 
 namespace Twingly.Search.Client
 {
@@ -91,6 +92,25 @@ namespace Twingly.Search.Client
         /// </returns>
         public QueryBuilder Language(Language language)
         {
+            internalQuery.Language = language.GetLanguageValue();
+            return this;
+        }
+
+        /// <summary>
+        /// Please resort to this method only if the overload accepting <see cref="Language(Twingly.Search.Client.Domain.Language)"/>
+        /// doesn't cover the language you're interested in.
+        /// Restricts the query to a specific language, for example 'en' or 'sv',
+        /// Note that some API keys only grant access to specific language(s).
+        /// </summary>
+        /// <param name="language">Document language</param>
+        /// <returns>
+        /// A half-baked query with the given <paramref name="language"/>.
+        /// </returns>
+        public QueryBuilder Language(string language)
+        {
+            if (String.IsNullOrWhiteSpace(language))
+                throw new ArgumentException("Please set this argument to a non-empty string.", nameof(language));
+
             internalQuery.Language = language;
             return this;
         }
