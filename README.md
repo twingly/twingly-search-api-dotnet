@@ -34,6 +34,9 @@ Fetch docs about "Slack" published since yesterday. Limit results to 10 posts.
                                         .Build();
 
     ITwinglySearchClient client = new TwinglySearchClient();
+    // identify your company by setting the user agent.
+    client.UserAgent = "Willy Wonka Chocolate Factory";
+
     QueryResult matchingDocs = client.Query(theQuery);
     foreach (var post in matchingDocs.Posts)
     {

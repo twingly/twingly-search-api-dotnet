@@ -27,6 +27,8 @@ namespace Twingly.Search.Samples
                                                 .Build();
 
             ITwinglySearchClient client = new TwinglySearchClient();
+            client.UserAgent = "Willy Wonka Chocolate Factory";
+
             try
             {
                 QueryResult matchingDocs = client.Query(theQuery);

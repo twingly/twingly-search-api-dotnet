@@ -126,18 +126,37 @@ namespace Twingly.Search.Tests
             // Arrange 
             HttpRequestMessage requestMessage = null;
             TwinglySearchClient client = SetupTwinglyClientWithResponseFile("SuccessfulApiResponse.5posts.xml", request => requestMessage = request);
-            string expectedUserAgent = "Hey, I'm a .NET client!";
+            string expectedUserAgent = "Hey, I'm a .NET client!/.NET v." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             Query validQuery = QueryBuilder
                                 .Create("A valid query")
                                 .Build();
 
             // Act
-            client.UserAgent = expectedUserAgent;
+            client.UserAgent = "Hey, I'm a .NET client!";
             client.Query(validQuery);
 
             // Assert
             Assert.AreEqual(expectedUserAgent, requestMessage.Headers.UserAgent.ToString());
         }
+
+        [TestMethod]
+        public void When_UserAgentNotSet_Then_ShouldSerializeDefaultToRequestHeader()
+        {
+            // Arrange 
+            HttpRequestMessage requestMessage = null;
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("SuccessfulApiResponse.5posts.xml", request => requestMessage = request);
+            string expectedUserAgent = "Twingly API Client/.NET v." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            Query validQuery = QueryBuilder
+                                .Create("A valid query")
+                                .Build();
+
+            // Act
+            client.Query(validQuery);
+
+            // Assert
+            Assert.AreEqual(expectedUserAgent, requestMessage.Headers.UserAgent.ToString());
+        }
+
 
         [TestMethod]
         [ExpectedException(typeof(ApiKeyDoesNotExistException),

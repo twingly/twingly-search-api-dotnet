@@ -24,8 +24,9 @@ namespace Twingly.Search.Client
         private readonly TraceSource verboseTracer = new TraceSource("TwinglySearchClient") { Switch = { Level = SourceLevels.Off} };
         private static readonly string requestFormat = "?key={0}&" + Constants.SearchPattern + "={1}&xmloutputversion=2";
 
-        private string userAgent =
-            String.Format("Twingly Search .NET Client/{0}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
+        private static readonly string userAgentTemplate = "{0}/.NET v." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+
+        private string userAgent = null;
 
         /// <summary>
         /// Gets or sets the HTTP request User-Agent property.
@@ -40,7 +41,7 @@ namespace Twingly.Search.Client
             {
                 if (!String.IsNullOrWhiteSpace(value))
                 {
-                    this.userAgent = value;
+                    this.userAgent = String.Format(userAgentTemplate, value);
                     internalClient.DefaultRequestHeaders.Remove("User-Agent");
                     internalClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", UserAgent);
                 }
@@ -63,14 +64,9 @@ namespace Twingly.Search.Client
         /// </summary>
         public TwinglySearchClient(TwinglyConfiguration config)
         {
-            this.config = new LocalConfiguration();
-            this.internalClient = new HttpClient()
-            {
-                BaseAddress = new Uri(Constants.ApiBaseAddress),
-                Timeout = TimeSpan.FromMilliseconds(config.RequestTimeoutMilliseconds)
-            };
-
-            internalClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", UserAgent);
+            this.config = config;
+            this.internalClient = new HttpClient();
+            InitializeClient();
         }
 
         /// <summary>
@@ -81,10 +77,14 @@ namespace Twingly.Search.Client
         {
             this.config = clientConfig;
             this.internalClient = client;
+            InitializeClient();
+        }
+
+        private void InitializeClient()
+        {
             this.internalClient.BaseAddress = new Uri(Constants.ApiBaseAddress);
             this.internalClient.Timeout = TimeSpan.FromMilliseconds(config.RequestTimeoutMilliseconds);
-
-            internalClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", UserAgent);
+            UserAgent = "Twingly API Client";
         }
 
         /// <summary>
