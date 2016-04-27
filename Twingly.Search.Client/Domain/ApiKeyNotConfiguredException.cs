@@ -4,7 +4,8 @@ using System.Runtime.Serialization;
 namespace Twingly.Search.Client.Domain
 {
     /// <summary>
-    /// Occurs when an API key is not found in appSettings/TWINGLY_API_KEY
+    /// Occurs when an API key is not found neither in appSettings/TWINGLY_SEARCH_KEY  
+    /// nor in the 'TWINGLY_SEARCH_KEY ' environment variable.
     /// </summary>
     public class ApiKeyNotConfiguredException : Exception
     {
