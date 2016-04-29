@@ -86,38 +86,73 @@ namespace Twingly.Search.Tests
         {
             // Arrange 
             HttpRequestMessage requestMessage = null;
-            int expectedPostCount = 5;
-            double expectedSecondsElapsed = 0.236;
-            int expectedNumberOfMatchesTotal = 190596;
-            string expectedLanguageCode = "en";
-            DateTime expectedPublished = DateTime.Parse("2016-04-04 12:39:09Z", null, DateTimeStyles.AdjustToUniversal);
-            DateTime expectedIndexed = DateTime.Parse("2016-04-04 12:42:23Z",null, DateTimeStyles.AdjustToUniversal);
-            int expectedTagCount = 2;
-            int expectedRank = 1;
-            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("SuccessfulApiResponse.5posts.xml", request => requestMessage = request);
+            int expectedPostCount = 3;
+            double expectedSecondsElapsed = 0.148;
+            int expectedNumberOfMatchesTotal = 3;
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("minimal_valid_result.xml", request => requestMessage = request);
             Query validQuery = QueryBuilder
                                 .Create("A valid query")
                                 .Build();
 
             // Act
             QueryResult result = client.Query(validQuery);
-            Post secondPost = result.Posts.ElementAt(1);
 
             // Assert
             Assert.AreEqual(expectedPostCount, result.Posts.Count);
+            Assert.AreEqual(expectedPostCount, result.NumberOfMatchesReturned);
             Assert.AreEqual(expectedSecondsElapsed, result.SecondsElapsed);
             Assert.AreEqual(expectedNumberOfMatchesTotal, result.NumberOfMatchesTotal);
-            Assert.AreEqual(expectedLanguageCode, secondPost.LanguageCode);
-            Assert.AreEqual(expectedPublished, secondPost.Published);
-            Assert.AreEqual(expectedIndexed, secondPost.Indexed);
-            Assert.AreEqual(expectedRank, secondPost.BlogRank);
-            Assert.AreEqual(expectedRank, secondPost.Authority);
-            Assert.AreEqual(expectedTagCount, secondPost.Tags.Count);
-            Assert.IsTrue(!String.IsNullOrWhiteSpace(secondPost.Url));
-            Assert.IsTrue(!String.IsNullOrWhiteSpace(secondPost.Title));
-            Assert.IsTrue(!String.IsNullOrWhiteSpace(secondPost.Summary));
-            Assert.IsTrue(!String.IsNullOrWhiteSpace(secondPost.BlogUrl));
-            Assert.IsTrue(!String.IsNullOrWhiteSpace(secondPost.BlogName));
+            Assert.AreEqual(result.Posts[0].Url, "http://oppogner.blogg.no/1409602010_bare_m_ha.html");
+            Assert.AreEqual(result.Posts[0].BlogName, "oppogner");
+            Assert.AreEqual(result.Posts[0].BlogUrl, "http://oppogner.blogg.no/");
+            Assert.AreEqual(result.Posts[0].Title, "Bare MÅ ha!");
+            Assert.AreEqual(result.Posts[0].Summary, "Ja, velkommen til høsten...");
+            Assert.AreEqual(result.Posts[0].LanguageCode, "no");
+            Assert.AreEqual(result.Posts[0].Published, DateTime.Parse("2014-09-02 06:53:26Z", null, DateTimeStyles.AdjustToUniversal));
+            Assert.AreEqual(result.Posts[0].Indexed, DateTime.Parse("2014-09-02 09:00:53", null, DateTimeStyles.AdjustToUniversal));
+            Assert.AreEqual(result.Posts[0].Authority, 1);
+            Assert.AreEqual(result.Posts[0].BlogRank, 1);
+            Assert.AreEqual(result.Posts[0].Tags.Count,1);
+            Assert.AreEqual(result.Posts[0].Tags.First(), "Blogg");
+
+            Assert.AreEqual(result.Posts[1].Url, "http://www.skvallernytt.se/hardtraning-da-galler-swedish-house-mafia");
+            Assert.AreEqual(result.Posts[1].BlogName, "Skvallernytt.se");
+            Assert.AreEqual(result.Posts[1].BlogUrl, "http://www.skvallernytt.se/");
+            Assert.AreEqual(result.Posts[1].Title, "Hårdträning – då gäller Swedish House Mafia");
+            Assert.AreEqual(result.Posts[1].Summary,"Träning.Och Swedish House Mafia.Det verkar vara ett lyckat koncept." +
+                                                    " \"Don't you worry child\" och \"Greyhound\" är nämligen de två mest spelade" +
+                                                    " träningslåtarna under januari 2013 på Spotify.\n\nRelaterade inlägg:\nSwedish House Mafia" +
+                                                    " – ny låt!\nNy knivattack på Swedish House Mafia-konsert\nSwedish House Mafia gör succé i USA");
+            Assert.AreEqual(result.Posts[1].LanguageCode, "sv");
+            Assert.AreEqual(result.Posts[1].Published, DateTime.Parse("2013-01-29 15:21:56", null, DateTimeStyles.AdjustToUniversal));
+            Assert.AreEqual(result.Posts[1].Indexed, DateTime.Parse("2013-01-29 15:22:52", null, DateTimeStyles.AdjustToUniversal));
+            Assert.AreEqual(result.Posts[1].Authority, 38);
+            Assert.AreEqual(result.Posts[1].BlogRank, 4);
+            Assert.AreEqual(result.Posts[1].Tags.Count, 5);
+
+            Assert.IsTrue(result.Posts[1].Tags.All(tag => new List<string>()
+            {
+                "Okategoriserat",
+                "Träning",
+                "greyhound",
+                "koncept",
+                "mafia"
+            }.Contains(tag)));
+
+            Assert.AreEqual(result.Posts[2].Url, "http://didriksinspesielleverden.blogg.no/1359472349_justin_bieber.html");
+            Assert.AreEqual(result.Posts[2].BlogName, "Didriksinspesielleverden");
+            Assert.AreEqual(result.Posts[2].BlogUrl, "http://didriksinspesielleverden.blogg.no/");
+            Assert.AreEqual(result.Posts[2].Title, "Justin Bieber");
+            Assert.AreEqual(result.Posts[2].Summary, "OMG! Justin Bieber Believe acoustic albumet" +
+                                                     " er nå ute på spotify.Han er helt super.Love him." +
+                                                     "Personlig liker jeg best beauty and a beat og as long" +
+                                                     " as you love me, kommenter gjerne hva dere synes! <3 #sus YOLO");
+            Assert.AreEqual(result.Posts[2].LanguageCode, "no");
+            Assert.AreEqual(result.Posts[2].Published, DateTime.Parse("2013-01-29 15:12:29", null, DateTimeStyles.AdjustToUniversal));
+            Assert.AreEqual(result.Posts[2].Indexed, DateTime.Parse("2013-01-29 15:14:37", null, DateTimeStyles.AdjustToUniversal));
+            Assert.AreEqual(result.Posts[2].Authority,0);
+            Assert.AreEqual(result.Posts[2].BlogRank, 1);
+            Assert.AreEqual(result.Posts[2].Tags.Count, 0);
         }
 
         [TestMethod]
