@@ -21,7 +21,6 @@ namespace Twingly.Search.Client
     {
         private readonly HttpClient internalClient = null;
         private readonly TwinglyConfiguration config = null;
-        private readonly TraceSource verboseTracer = new TraceSource("TwinglySearchClient") { Switch = { Level = SourceLevels.Off} };
         private static readonly string requestFormat = "?key={0}&" + Constants.SearchPattern + "={1}&xmloutputversion=2";
 
         private static readonly string userAgentTemplate = "{0}/.NET v." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
@@ -119,14 +118,14 @@ namespace Twingly.Search.Client
                     await this.internalClient.GetStreamAsync(requestUri).ConfigureAwait(false)) // continue on the thread pool to avoid deadlocks
                 {
                     sw.Stop();
-                    verboseTracer.TraceInformation("Received server response in {0} ms", sw.ElapsedMilliseconds);
+                    Debug.WriteLine("Received server response in {0} ms", sw.ElapsedMilliseconds);
                     sw.Restart();
                     result = resultStream.ReadStreamIntoString();
                 }
 
                 returnValue = result.DeserializeXml<QueryResult>();
                 sw.Stop();
-                verboseTracer.TraceInformation("Deserialized server response in {0} ms", sw.ElapsedMilliseconds);
+                Debug.WriteLine("Deserialized server response in {0} ms", sw.ElapsedMilliseconds);
             }
             catch (Exception ex)
             {
