@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdvancedQueryLanguageExample.cs" />
+    <Compile Include="PageOverBlogPostsExample.cs" />
     <Compile Include="FindPostsSinceYesterdayExample.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

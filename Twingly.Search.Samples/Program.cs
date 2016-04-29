@@ -12,6 +12,7 @@ namespace Twingly.Search.Samples
         {
             FindPostsSinceYesterdayExample.RunExample();
             AdvancedQueryLanguageExample.RunExample();
+            PageOverBlogPostsExample.RunExample();
 
             Console.WriteLine("Press any key to continue...");
             Console.Read();

@@ -32,5 +32,17 @@ namespace Twingly.Search.Client.Domain
         /// </summary>
         [XmlAttribute(AttributeName = "numberOfMatchesTotal")]
         public long NumberOfMatchesTotal { get; set; }
+
+        /// <summary>
+        /// Specifies whether
+        /// </summary>
+        public bool HasNoMoreResults
+        {
+            get
+            {
+                return NumberOfMatchesReturned == NumberOfMatchesTotal
+                        && NumberOfMatchesReturned == 0;
+            }
+        }
     }
 }
