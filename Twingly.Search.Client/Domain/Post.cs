@@ -43,13 +43,11 @@ namespace Twingly.Search.Client.Domain
         /// the date will be set to when the post was indexed.
         /// </summary>
         [XmlIgnore]
-        public DateTime? Published
+        public DateTime Published
         {
             get
             {
-                return SerializerBackingStringFieldPublished != null
-                    ? (DateTime?)DateTime.Parse(SerializerBackingStringFieldPublished, null, DateTimeStyles.AdjustToUniversal)
-                    : null;
+                return DateTime.Parse(SerializerBackingStringFieldPublished, null, DateTimeStyles.AdjustToUniversal);
             }
         }
 
@@ -60,13 +58,11 @@ namespace Twingly.Search.Client.Domain
         /// When Twingly indexed the post, in UTC.
         /// </summary>
         [XmlIgnore]
-        public DateTime? Indexed
+        public DateTime Indexed
         {
             get
             {
-                return SerializerBackingStringFieldIndexed != null
-                    ? (DateTime?)DateTime.Parse(SerializerBackingStringFieldIndexed, null, DateTimeStyles.AdjustToUniversal)
-                    : null;
+                return DateTime.Parse(SerializerBackingStringFieldIndexed, null, DateTimeStyles.AdjustToUniversal);
             }
         }
 

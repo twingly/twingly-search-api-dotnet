@@ -35,7 +35,7 @@ namespace Twingly.Search.Samples
                 while (!matchingDocs.HasNoMoreResults)
                 {
                     totalResultCount += matchingDocs.Posts.Count;
-                    theQuery.StartTime = matchingDocs.Posts.Last().Published.Value.AddSeconds(1);
+                    theQuery.StartTime = matchingDocs.Posts.Last().Published.AddSeconds(1);
                     matchingDocs = client.Query(theQuery);
                 }
             }
