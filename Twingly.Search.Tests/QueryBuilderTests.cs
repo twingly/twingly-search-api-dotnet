@@ -111,5 +111,41 @@ namespace Twingly.Search.Tests
             Assert.AreEqual(searchPattern, testResult.SearchPattern, errorMessage);
         }
 
+        [TestMethod]
+        public void When_SettingUnknownLanguageToNonEmptyValue_Then_ShouldSucceed()
+        {
+            // Arrange
+            string language = "WW";
+            string errorMessage = "Failed to set the language to the given value";
+
+            // Act
+            Query testResult = QueryBuilder.Create("Some text")
+                                           .Language(language)
+                                           .Build();
+
+            // Assert
+            Assert.AreEqual(language, testResult.Language, errorMessage);
+        }
+
+        [ExpectedException(typeof(ArgumentException))]
+        [TestMethod]
+        public void When_SettingUnknownLanguageToNullValue_Then_ShouldThrow()
+        {
+            // Arrange, Act, Assert
+            Query testResult = QueryBuilder.Create("Some text")
+                                           .Language(null)
+                                           .Build();
+        }
+
+        [ExpectedException(typeof(ArgumentException))]
+        [TestMethod]
+        public void When_SettingUnknownLanguageToEmptyValue_Then_ShouldThrow()
+        {
+            // Arrange, Act, Assert
+            Query testResult = QueryBuilder.Create("Some text")
+                                           .Language(" ")
+                                           .Build();
+        }
+
     }
 }
