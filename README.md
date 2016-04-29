@@ -61,7 +61,7 @@ Client exceptions are organized into the following hierachy:
 * .NET Framework v4.5.2 
 
 ### NuGet publishing
-A NuGet package is automatically generated on each build, using handy [automation scripts by Daniel Schroeder](https://newnugetpackage.codeplex.com/wikipage?title=NuGet%20Package%20To%20Create%20A%20NuGet%20Package%20From%20Your%20Project%20After%20Every%20Build&referringTitle=Home)
+A NuGet package is automatically generated on each build, using handy [automation scripts by Daniel Schroeder](https://newnugetpackage.codeplex.com/wikipage?title=NuGet%20Package%20To%20Create%20A%20NuGet%20Package%20From%20Your%20Project%20After%20Every%20Build&referringTitle=Home).
 After build, the `'.nupkg'` file is placed in `..Twingly.Search.Client\bin\Release` folder. If you want to publish to Nuget.org manually, you can run `Twingly.Search.Client\_CreateNewNuGetPackage\RunMeToUploadNuGetPackage.cmd`, point it to the `'.nupkg'` file and enter your API key.
 
 ## License
