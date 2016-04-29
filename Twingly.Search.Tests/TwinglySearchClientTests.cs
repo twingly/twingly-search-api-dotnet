@@ -17,7 +17,7 @@ namespace Twingly.Search.Tests
 {
     [TestClass]
     [DeploymentItem(@"TestData")]
-    public class TwinglySearchClientUnitTests
+    public class TwinglySearchClientTests
     {
 
         [TestMethod]
@@ -208,6 +208,21 @@ namespace Twingly.Search.Tests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(TwinglyRequestException),
+           "Failed to recognize and throw the proper error when server returned an unknown error response.")]
+        public void When_ReceivedAnUnknownErrorResult_ShouldThrow()
+        {
+            // Arrange
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("undefined_error_result.xml", request => { });
+            Query validQuery = QueryBuilder
+                                .Create("A valid query")
+                                .Build();
+
+            // Act & Assert
+            client.Query(validQuery);
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(UnauthorizedApiKeyException),
            "Failed to throw a proper exception when an API key is not authorized for this request.")]
         public void When_ApiKeyNotAuthorized_Then_ShouldSaySo()
@@ -274,7 +289,6 @@ namespace Twingly.Search.Tests
         }
     }
 
-
     [TestClass]
     public class TwinglySearchClientIntegrationTests
     {
@@ -307,5 +321,6 @@ namespace Twingly.Search.Tests
             // Act, Assert (should throw).
             QueryResult response = client.Query(theQuery);
         }
+       
     }
 }
