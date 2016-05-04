@@ -109,7 +109,7 @@ namespace Twingly.Search.Tests
             Assert.AreEqual(result.Posts[0].Summary, "Ja, velkommen til høsten...");
             Assert.AreEqual(result.Posts[0].LanguageCode, "no");
             Assert.AreEqual(result.Posts[0].Published, DateTime.Parse("2014-09-02 06:53:26Z", null, DateTimeStyles.AdjustToUniversal));
-            Assert.AreEqual(result.Posts[0].Indexed, DateTime.Parse("2014-09-02 09:00:53", null, DateTimeStyles.AdjustToUniversal));
+            Assert.AreEqual(result.Posts[0].Indexed, DateTime.Parse("2014-09-02 09:00:53Z", null, DateTimeStyles.AdjustToUniversal));
             Assert.AreEqual(result.Posts[0].Authority, 1);
             Assert.AreEqual(result.Posts[0].BlogRank, 1);
             Assert.AreEqual(result.Posts[0].Tags.Count,1);
@@ -124,8 +124,8 @@ namespace Twingly.Search.Tests
                                                     " träningslåtarna under januari 2013 på Spotify.\n\nRelaterade inlägg:\nSwedish House Mafia" +
                                                     " – ny låt!\nNy knivattack på Swedish House Mafia-konsert\nSwedish House Mafia gör succé i USA");
             Assert.AreEqual(result.Posts[1].LanguageCode, "sv");
-            Assert.AreEqual(result.Posts[1].Published, DateTime.Parse("2013-01-29 15:21:56", null, DateTimeStyles.AdjustToUniversal));
-            Assert.AreEqual(result.Posts[1].Indexed, DateTime.Parse("2013-01-29 15:22:52", null, DateTimeStyles.AdjustToUniversal));
+            Assert.AreEqual(result.Posts[1].Published, DateTime.Parse("2013-01-29 15:21:56Z", null, DateTimeStyles.AdjustToUniversal));
+            Assert.AreEqual(result.Posts[1].Indexed, DateTime.Parse("2013-01-29 15:22:52Z", null, DateTimeStyles.AdjustToUniversal));
             Assert.AreEqual(result.Posts[1].Authority, 38);
             Assert.AreEqual(result.Posts[1].BlogRank, 4);
             Assert.AreEqual(result.Posts[1].Tags.Count, 5);
@@ -148,8 +148,8 @@ namespace Twingly.Search.Tests
                                                      "Personlig liker jeg best beauty and a beat og as long" +
                                                      " as you love me, kommenter gjerne hva dere synes! <3 #sus YOLO");
             Assert.AreEqual(result.Posts[2].LanguageCode, "no");
-            Assert.AreEqual(result.Posts[2].Published, DateTime.Parse("2013-01-29 15:12:29", null, DateTimeStyles.AdjustToUniversal));
-            Assert.AreEqual(result.Posts[2].Indexed, DateTime.Parse("2013-01-29 15:14:37", null, DateTimeStyles.AdjustToUniversal));
+            Assert.AreEqual(result.Posts[2].Published, DateTime.Parse("2013-01-29 15:12:29Z", null, DateTimeStyles.AdjustToUniversal));
+            Assert.AreEqual(result.Posts[2].Indexed, DateTime.Parse("2013-01-29 15:14:37Z", null, DateTimeStyles.AdjustToUniversal));
             Assert.AreEqual(result.Posts[2].Authority,0);
             Assert.AreEqual(result.Posts[2].BlogRank, 1);
             Assert.AreEqual(result.Posts[2].Tags.Count, 0);
@@ -161,7 +161,7 @@ namespace Twingly.Search.Tests
             // Arrange 
             HttpRequestMessage requestMessage = null;
             TwinglySearchClient client = SetupTwinglyClientWithResponseFile("SuccessfulApiResponse.5posts.xml", request => requestMessage = request);
-            string expectedUserAgent = "Hey, I'm a .NET client!/.NET v." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            string expectedUserAgent = "Hey, I'm a .NET client!/.NET v." + typeof(TwinglySearchClient).Assembly.GetName().Version;
             Query validQuery = QueryBuilder
                                 .Create("A valid query")
                                 .Build();

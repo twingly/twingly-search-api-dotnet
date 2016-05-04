@@ -21,7 +21,7 @@ namespace Twingly.Search.Samples
             // get all posts about 'Slack' since yesterday, in English.
             // limit to 10 posts.
             Console.WriteLine("-------Running the 'Find Posts Since Yesterday' example-------");
-            Query theQuery = QueryBuilder.Create("Slack page: 10000 page-size:10")
+            Query theQuery = QueryBuilder.Create("Slack page-size:10")
                                                 .StartTime(DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)))
                                                 .Language(Language.English) // if you skipped it, English would be used as default
                                                 .Build();
