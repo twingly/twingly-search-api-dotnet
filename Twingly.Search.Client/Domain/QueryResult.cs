@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace Twingly.Search.Client.Domain
@@ -9,6 +10,7 @@ namespace Twingly.Search.Client.Domain
     [XmlRoot(ElementName = "twinglydata")]
     public class QueryResult
     {
+
         /// <summary>
         /// A collection of matching blog posts.
         /// </summary>

@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Domain\ApiKeyDoesNotExistException.cs" />
     <Compile Include="Domain\ApiKeyNotConfiguredException.cs" />
+    <Compile Include="Domain\ContentType.cs" />
     <Compile Include="Domain\TwinglyConfiguration.cs" />
     <Compile Include="Domain\Constants.cs" />
     <Compile Include="Domain\Language.cs" />

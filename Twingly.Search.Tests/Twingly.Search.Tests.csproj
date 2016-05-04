@@ -67,6 +67,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Compile Include="TwinglySearchClientTests.cs" />
+    <Content Include="TestData\valid_non_blog_result.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Twingly.Search.Client\Twingly.Search.Client.csproj">

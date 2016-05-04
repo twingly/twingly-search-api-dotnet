@@ -124,6 +124,8 @@ namespace Twingly.Search.Client
                 }
 
                 returnValue = result.DeserializeXml<QueryResult>();
+                // filter out non-blog results by a special request from @walro
+                returnValue.Posts = returnValue.Posts?.Where(p => p.ContentType.Equals(ContentType.Blog)).ToList();
                 sw.Stop();
                 Debug.WriteLine("Deserialized server response in {0} ms", sw.ElapsedMilliseconds);
             }

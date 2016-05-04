@@ -156,6 +156,39 @@ namespace Twingly.Search.Tests
         }
 
         [TestMethod]
+        public void When_ANonBlogRequestIsEncountered_Then_ShouldHandleGracefully()
+        {
+            // Arrange 
+            HttpRequestMessage requestMessage = null;
+            int expectedPostCount = 2;
+            double expectedSecondsElapsed = 0.022;
+            int expectedNumberOfMatchesTotal = 2;
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("valid_non_blog_result.xml", request => requestMessage = request);
+            Query validQuery = QueryBuilder
+                                .Create("A valid query")
+                                .Build();
+
+            // Act
+            QueryResult result = client.Query(validQuery);
+
+            // Assert
+            Assert.AreEqual(expectedPostCount, result.NumberOfMatchesReturned);
+            Assert.AreEqual(expectedNumberOfMatchesTotal, result.NumberOfMatchesTotal);
+            Assert.AreEqual(expectedSecondsElapsed, result.SecondsElapsed);
+            Assert.AreEqual(result.Posts.Count, 1);
+            Assert.AreEqual(result.Posts[0].Url, "http://www.someotherurl.com/post");
+            Assert.AreEqual(result.Posts[0].BlogName, "Blog Name");
+            Assert.AreEqual(result.Posts[0].BlogUrl, "http://www.someotherurl.com/");
+            Assert.IsFalse(result.Posts[0].Tags.Any());
+            Assert.AreEqual(result.Posts[0].Summary, "Summary");
+            Assert.AreEqual(result.Posts[0].LanguageCode, "sv");
+            Assert.AreEqual(result.Posts[0].Published, DateTime.Parse("2013-01-29 15:26:33Z", null, DateTimeStyles.AdjustToUniversal));
+            Assert.AreEqual(result.Posts[0].Indexed, DateTime.Parse("2013-01-29 15:27:07Z", null, DateTimeStyles.AdjustToUniversal));
+            Assert.AreEqual(result.Posts[0].Authority, 0);
+            Assert.AreEqual(result.Posts[0].BlogRank, 1);
+        }
+
+        [TestMethod]
         public void When_UserAgentIsSet_Then_ShouldSerializeToRequestHeader()
         {
             // Arrange 
