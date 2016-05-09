@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
 using Twingly.Search.Client;
 using Twingly.Search.Client.Domain;
 
@@ -146,6 +145,5 @@ namespace Twingly.Search.Tests
                                            .Language(" ")
                                            .Build();
         }
-
     }
 }

@@ -3,8 +3,6 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Xml;
 using System.Xml.Serialization;
 using Twingly.Search.Client.Domain;
 
@@ -12,7 +10,7 @@ namespace Twingly.Search.Client.Infrastructure
 {
     internal static class Extensions
     {
-        private static readonly ConcurrentDictionary<Type, XmlSerializer> serializerCache = 
+        private static readonly ConcurrentDictionary<Type, XmlSerializer> serializerCache =
             new ConcurrentDictionary<Type, XmlSerializer>();
 
         public static T DeserializeXml<T>(this string xmlString)
@@ -67,7 +65,7 @@ namespace Twingly.Search.Client.Infrastructure
                 return targetAttribute.Value;
             }
 
-            return String.Empty ;
+            return String.Empty;
         }
     }
 }

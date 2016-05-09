@@ -71,7 +71,6 @@ namespace Twingly.Search.Client.Domain
             this.SearchPattern = searchPattern;
         }
 
-
         internal void ThrowIfNotAValidStartTime(DateTime startTime)
         {
             // allow 'give me the freshest posts' queries by accounting for
@@ -91,7 +90,7 @@ namespace Twingly.Search.Client.Domain
 
         internal void ThrowIfInvalid()
         {
-            if(this.StartTime.HasValue)
+            if (this.StartTime.HasValue)
                 ThrowIfNotAValidStartTime(this.StartTime.Value);
             if (this.EndTime.HasValue)
                 ThrowIfNotAValidEndTime(this.EndTime.Value);

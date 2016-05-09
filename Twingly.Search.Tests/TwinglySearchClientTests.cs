@@ -6,9 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using Twingly.Search.Client;
 using Twingly.Search.Client.Domain;
 using Twingly.Search.Client.Infrastructure;
@@ -19,7 +17,6 @@ namespace Twingly.Search.Tests
     [DeploymentItem(@"TestData")]
     public class TwinglySearchClientTests
     {
-
         [TestMethod]
         public void When_ApiKeyConfigured_Then_ShouldReadSuccessfully()
         {
@@ -44,7 +41,7 @@ namespace Twingly.Search.Tests
         {
             // Arrange 
             bool isServiceCalled = false;
-            TwinglySearchClient client = 
+            TwinglySearchClient client =
                 SetupTwinglyClientWithResponseFile("SuccessfulApiResponse.5posts.xml", request => isServiceCalled = true);
             Query validQuery = QueryBuilder.Create("A valid query").Build();
 
@@ -112,14 +109,14 @@ namespace Twingly.Search.Tests
             Assert.AreEqual(result.Posts[0].Indexed, DateTime.Parse("2014-09-02 09:00:53Z", null, DateTimeStyles.AdjustToUniversal));
             Assert.AreEqual(result.Posts[0].Authority, 1);
             Assert.AreEqual(result.Posts[0].BlogRank, 1);
-            Assert.AreEqual(result.Posts[0].Tags.Count,1);
+            Assert.AreEqual(result.Posts[0].Tags.Count, 1);
             Assert.AreEqual(result.Posts[0].Tags.First(), "Blogg");
 
             Assert.AreEqual(result.Posts[1].Url, "http://www.skvallernytt.se/hardtraning-da-galler-swedish-house-mafia");
             Assert.AreEqual(result.Posts[1].BlogName, "Skvallernytt.se");
             Assert.AreEqual(result.Posts[1].BlogUrl, "http://www.skvallernytt.se/");
             Assert.AreEqual(result.Posts[1].Title, "Hårdträning – då gäller Swedish House Mafia");
-            Assert.AreEqual(result.Posts[1].Summary,"Träning.Och Swedish House Mafia.Det verkar vara ett lyckat koncept." +
+            Assert.AreEqual(result.Posts[1].Summary, "Träning.Och Swedish House Mafia.Det verkar vara ett lyckat koncept." +
                                                     " \"Don't you worry child\" och \"Greyhound\" är nämligen de två mest spelade" +
                                                     " träningslåtarna under januari 2013 på Spotify.\n\nRelaterade inlägg:\nSwedish House Mafia" +
                                                     " – ny låt!\nNy knivattack på Swedish House Mafia-konsert\nSwedish House Mafia gör succé i USA");
@@ -150,7 +147,7 @@ namespace Twingly.Search.Tests
             Assert.AreEqual(result.Posts[2].LanguageCode, "no");
             Assert.AreEqual(result.Posts[2].Published, DateTime.Parse("2013-01-29 15:12:29Z", null, DateTimeStyles.AdjustToUniversal));
             Assert.AreEqual(result.Posts[2].Indexed, DateTime.Parse("2013-01-29 15:14:37Z", null, DateTimeStyles.AdjustToUniversal));
-            Assert.AreEqual(result.Posts[2].Authority,0);
+            Assert.AreEqual(result.Posts[2].Authority, 0);
             Assert.AreEqual(result.Posts[2].BlogRank, 1);
             Assert.AreEqual(result.Posts[2].Tags.Count, 0);
         }
@@ -224,7 +221,6 @@ namespace Twingly.Search.Tests
             // Assert
             Assert.AreEqual(expectedUserAgent, requestMessage.Headers.UserAgent.ToString());
         }
-
 
         [TestMethod]
         [ExpectedException(typeof(ApiKeyDoesNotExistException),
@@ -343,17 +339,16 @@ namespace Twingly.Search.Tests
 
         [TestMethod]
         [TestCategory("Integration")]
-        [ExpectedException(typeof (ApiKeyDoesNotExistException),
+        [ExpectedException(typeof(ApiKeyDoesNotExistException),
             "Failed to recognize and throw an error when using a non-existing API key.")]
         public void When_UsingInvalidKey_ShouldThrow()
         {
             // Arrange 
-            var client = new TwinglySearchClient(new FakeValidConfiguration(), new HttpClient()); 
+            var client = new TwinglySearchClient(new FakeValidConfiguration(), new HttpClient());
             var theQuery = QueryBuilder.Create("twingly page-size:100").Build();
 
             // Act, Assert (should throw).
             QueryResult response = client.Query(theQuery);
         }
-       
     }
 }

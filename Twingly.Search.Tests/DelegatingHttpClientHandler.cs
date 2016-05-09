@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -42,10 +40,10 @@ namespace Twingly.Search.Tests
             var stream = new MemoryStream(contentBytes);
 
             return new HttpResponseMessage
-                   {
-                       StatusCode = httpStatusCode,
-                       Content = new StreamContent(stream)
-                   };
+            {
+                StatusCode = httpStatusCode,
+                Content = new StreamContent(stream)
+            };
         }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -13,7 +11,6 @@ using Twingly.Search.Client.Infrastructure;
 
 namespace Twingly.Search.Client
 {
-
     /// <summary>
     /// Enables querying the Twingly Search API.
     /// </summary>
@@ -52,9 +49,9 @@ namespace Twingly.Search.Client
         /// Initializes a new instance of <see cref="TwinglySearchClient"/>
         /// with the API key configured in the application configuration file.
         /// </summary>
-        public TwinglySearchClient():this(new LocalConfiguration())
+        public TwinglySearchClient() : this(new LocalConfiguration())
         {
-           
+
         }
 
         /// <summary>
@@ -113,7 +110,7 @@ namespace Twingly.Search.Client
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
 
-                using (Stream resultStream = 
+                using (Stream resultStream =
                     await this.internalClient.GetStreamAsync(requestUri).ConfigureAwait(false)) // continue on the thread pool to avoid deadlocks
                 {
                     sw.Stop();
@@ -158,21 +155,20 @@ namespace Twingly.Search.Client
             {
                 returnValue = QueryAsync(theQuery).Result;
             }
-            catch(AggregateException asyncEx)
+            catch (AggregateException asyncEx)
             {
                 // throw the underlying exception without messing up the stack trace
                 ExceptionDispatchInfo.Capture(asyncEx.InnerException).Throw();
             }
 
             return returnValue;
-          
         }
 
         private Exception MapResponseToException(string responseString, Exception inner)
         {
 
             BlogStream errorResponse = null;
-            if(inner is TaskCanceledException)
+            if (inner is TaskCanceledException)
                 return new TwinglyRequestException("The request has timed out", inner);
             if (String.IsNullOrWhiteSpace(responseString))
                 return new TwinglyRequestException("Twingly Search API returned an empty response", inner);
@@ -209,11 +205,11 @@ namespace Twingly.Search.Client
 
         private string BuildRequestUriFrom(Query theQuery)
         {
-            string initialRequest = 
+            string initialRequest =
                 String.Format(requestFormat, this.config.ApiKey, Uri.EscapeDataString(theQuery.SearchPattern));
             var builder = new StringBuilder(initialRequest);
             if (!String.IsNullOrWhiteSpace(theQuery.Language))
-                builder.AppendFormat("&{0}={1}", 
+                builder.AppendFormat("&{0}={1}",
                     Constants.DocumentLanguage, theQuery.Language);
             if (theQuery.StartTime.HasValue)
                 builder.AppendFormat("&{0}={1}",

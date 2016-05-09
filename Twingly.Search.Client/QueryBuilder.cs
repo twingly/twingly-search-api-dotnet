@@ -127,6 +127,5 @@ namespace Twingly.Search.Client
 
             return internalQuery;
         }
-
     }
 }

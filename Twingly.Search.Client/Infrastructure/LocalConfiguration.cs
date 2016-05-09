@@ -14,9 +14,9 @@ namespace Twingly.Search.Client.Infrastructure
         /// Initializes a new configuration with the settings
         /// configured in the application config file (primary source) or in environment variables (fallback source).
         /// </summary>
-        public LocalConfiguration():base(ReadApiKeyFromConfig(), ReadRequestTimeoutFromConfig())
+        public LocalConfiguration() : base(ReadApiKeyFromConfig(), ReadRequestTimeoutFromConfig())
         {
-            
+
         }
 
         private static string ReadApiKeyFromConfig()
@@ -47,8 +47,8 @@ namespace Twingly.Search.Client.Infrastructure
             {
                 int convertedValue = 0;
                 string timeoutValue = ReadConfigValue(Constants.TimeoutConfigSettingName);
-                returnValue = Int32.TryParse(timeoutValue, out convertedValue) 
-                    ? convertedValue 
+                returnValue = Int32.TryParse(timeoutValue, out convertedValue)
+                    ? convertedValue
                     : Constants.DefaultTimeout;
             }
 
@@ -70,6 +70,5 @@ namespace Twingly.Search.Client.Infrastructure
 
             return returnValue;
         }
-
     }
 }

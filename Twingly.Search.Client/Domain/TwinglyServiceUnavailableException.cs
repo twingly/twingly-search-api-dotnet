@@ -7,7 +7,6 @@ namespace Twingly.Search.Client.Domain
     /// </summary>
     public class TwinglyServiceUnavailableException : TwinglyRequestException
     {
-
         public TwinglyServiceUnavailableException() : base(message: Constants.ServiceUnavailable)
         {
 
@@ -17,6 +16,5 @@ namespace Twingly.Search.Client.Domain
         {
 
         }
-
     }
 }

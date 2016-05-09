@@ -105,5 +105,4 @@ namespace Twingly.Search.Client.Domain
         [XmlAttribute(AttributeName = "contentType")]
         public string ContentType { get; set; }
     }
-
 }

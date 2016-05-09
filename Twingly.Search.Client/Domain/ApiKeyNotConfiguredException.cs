@@ -15,16 +15,14 @@ namespace Twingly.Search.Client.Domain
                             + "OR create an environment variable, "
                             + "using '{0}' as the key.", Constants.ApiConfigSettingName);
 
-        public ApiKeyNotConfiguredException(): base(errorMessage) { }
+        public ApiKeyNotConfiguredException() : base(errorMessage) { }
 
-        public ApiKeyNotConfiguredException(string message): base(message) { }
+        public ApiKeyNotConfiguredException(string message) : base(message) { }
 
-        public ApiKeyNotConfiguredException(string message, Exception innerException): base (message, innerException) { }
+        public ApiKeyNotConfiguredException(string message, Exception innerException) : base(message, innerException) { }
 
         public ApiKeyNotConfiguredException(Exception innerException) : base(errorMessage, innerException) { }
 
-        protected ApiKeyNotConfiguredException(SerializationInfo info,
-           StreamingContext context) : base(info, context) { }
-
+        protected ApiKeyNotConfiguredException(SerializationInfo info, StreamingContext context) : base(info, context) { }
     }
 }

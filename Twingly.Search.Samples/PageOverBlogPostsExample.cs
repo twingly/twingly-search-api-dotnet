@@ -19,9 +19,8 @@ namespace Twingly.Search.Samples
     {
         public static void RunExample()
         {
-            
             Console.WriteLine("-------Running the 'Page over blog posts' example-------");
-            
+
             Query theQuery = QueryBuilder.Create("sort-order:asc sort:published page-size:500 (github) AND (hipchat OR slack)")
                                          .Build();
 
@@ -40,7 +39,6 @@ namespace Twingly.Search.Samples
                     totalResultCount += matchingDocs.Posts.Count;
                 }
             }
-
             catch (TwinglyRequestException ex)
             {
                 Console.WriteLine

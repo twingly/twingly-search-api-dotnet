@@ -3,7 +3,6 @@ using Twingly.Search.Client.Domain;
 
 namespace Twingly.Search.Client
 {
-
     /// <summary>
     /// Enables querying the Twingly Search API.
     /// </summary>

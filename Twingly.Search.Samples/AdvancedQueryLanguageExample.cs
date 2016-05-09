@@ -17,7 +17,6 @@ namespace Twingly.Search.Samples
     /// </remarks>
     public class AdvancedQueryLanguageExample
     {
-
         public static void RunExample()
         {
             // get all posts about 'Slack' since yesterday, in English.
