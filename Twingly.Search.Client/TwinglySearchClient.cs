@@ -103,7 +103,7 @@ namespace Twingly.Search.Client
         public async Task<QueryResult> QueryAsync(Query theQuery)
         {
             if (theQuery == null)
-                throw new ArgumentNullException(nameof(theQuery), "Hey, there's no way this argument can be null :(");
+                throw new ArgumentNullException(nameof(theQuery));
             theQuery.ThrowIfInvalid();
 
             string requestUri = BuildRequestUriFrom(theQuery);
@@ -175,9 +175,9 @@ namespace Twingly.Search.Client
 
             BlogStream errorResponse = null;
             if(inner is TaskCanceledException)
-                return new TwinglyRequestException("The request has timed out :(", inner);
+                return new TwinglyRequestException("The request has timed out", inner);
             if (String.IsNullOrWhiteSpace(responseString))
-                return new TwinglyRequestException("Twingly Search API returned an empty response :(", inner);
+                return new TwinglyRequestException("Twingly Search API returned an empty response", inner);
             try
             {
                 errorResponse = responseString.DeserializeXml<BlogStream>();
@@ -201,7 +201,7 @@ namespace Twingly.Search.Client
                     // This means that it's reasonable not to be afraid that the responseString is too large.
                     // It also shouldn't contain any sensitive data. Hence, including it into the error message is safe.
                     return new TwinglyRequestException
-                        (String.Format("Twingly Search API returned an unknown error :( Here's what it says: {0}", responseString), inner);
+                        (String.Format("Twingly Search API returned an unknown error: {0}", responseString), inner);
             }
             else
             {

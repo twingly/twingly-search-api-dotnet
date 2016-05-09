@@ -9,7 +9,7 @@ namespace Twingly.Search.Client.Domain
     public class TwinglyRequestException : Exception
     {
         private static readonly string errorMessage =
-            String.Format("Oops, an error occured while communicating with the API :(");
+            String.Format("An error occured while communicating with the API");
 
         public TwinglyRequestException(): base(errorMessage) { }
 
