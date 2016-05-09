@@ -1,5 +1,8 @@
-# twingly-search-api-dotnet ![Build status](https://ci.appveyor.com/api/projects/status/gljbvg2ds257o6jw?svg=true)
-.NET client for Twingly Search API (previously known as Twingly Analytics API). Twingly is a blog search service that provides [a searchable API](https://developer.twingly.com/resources/search/). 
+# twingly-search-api-dotnet
+
+[![Build status](https://ci.appveyor.com/api/projects/status/h3ga4nbgue02ufcm?svg=true)](https://ci.appveyor.com/project/Twingly/twingly-search-api-dotnet)
+
+.NET client for Twingly Search API (previously known as Twingly Analytics API). Twingly is a blog search service that provides [a searchable API](https://developer.twingly.com/resources/search/).
 
 ## Configuration
 
@@ -58,7 +61,7 @@ Client exceptions are organized into the following hierachy:
 
 ### Requirements
 * API key, [sign up](https://www.twingly.com/try-for-free) via [twingly.com](https://www.twingly.com/) to get one
-* .NET Framework v4.5.2 
+* .NET Framework v4.5.2
 
 ### NuGet publishing
 A NuGet package is automatically generated on each build, using handy [automation scripts by Daniel Schroeder](https://newnugetpackage.codeplex.com/wikipage?title=NuGet%20Package%20To%20Create%20A%20NuGet%20Package%20From%20Your%20Project%20After%20Every%20Build&referringTitle=Home).
