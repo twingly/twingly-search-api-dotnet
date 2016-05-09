@@ -15,7 +15,7 @@ namespace Twingly.Search.Samples
             PageOverBlogPostsExample.RunExample();
 
             Console.WriteLine("Press any key to continue...");
-            Console.Read();
+            Console.ReadKey();
         }
     }
 }
