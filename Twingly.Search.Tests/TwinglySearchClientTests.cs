@@ -127,14 +127,14 @@ namespace Twingly.Search.Tests
             Assert.AreEqual(result.Posts[1].BlogRank, 4);
             Assert.AreEqual(result.Posts[1].Tags.Count, 5);
 
-            Assert.IsTrue(result.Posts[1].Tags.All(tag => new List<string>()
+            CollectionAssert.AreEqual(result.Posts[1].Tags, new List<string>()
             {
                 "Okategoriserat",
                 "Träning",
                 "greyhound",
                 "koncept",
                 "mafia"
-            }.Contains(tag)));
+            });
 
             Assert.AreEqual(result.Posts[2].Url, "http://didriksinspesielleverden.blogg.no/1359472349_justin_bieber.html");
             Assert.AreEqual(result.Posts[2].BlogName, "Didriksinspesielleverden");
