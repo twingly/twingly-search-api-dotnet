@@ -213,7 +213,7 @@ namespace Twingly.Search.Tests
             // Arrange 
             HttpRequestMessage requestMessage = null;
             TwinglySearchClient client = SetupTwinglyClientWithResponseFile("SuccessfulApiResponse.5posts.xml", request => requestMessage = request);
-            string expectedUserAgent = "Twingly API Client/.NET v." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            string expectedUserAgent = "Twingly Search API Client/.NET v." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             Query validQuery = QueryBuilder
                                 .Create("A valid query")
                                 .Build();

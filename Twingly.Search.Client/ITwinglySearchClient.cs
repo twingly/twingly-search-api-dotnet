@@ -21,7 +21,7 @@ namespace Twingly.Search.Client
         /// <returns>
         /// Result of <paramref name="theQuery"/>.
         /// </returns>
-        /// <exception cref="TwinglyServiceUnavailableException">Thrown when the Twingly API reports that service is unavailable.</exception>
+        /// <exception cref="TwinglyServiceUnavailableException">Thrown when the Twingly Search API reports that service is unavailable.</exception>
         /// <exception cref="ApiKeyDoesNotExistException">Thrown when the supplied API key was not recognized by the remote server.</exception>
         /// <exception cref="UnauthorizedApiKeyException">
         /// Thrown when the supplied API key can't be used to service the query. 
@@ -37,7 +37,7 @@ namespace Twingly.Search.Client
         /// <returns>
         /// Result of <paramref name="theQuery"/>.
         /// </returns>
-        /// <exception cref="TwinglyServiceUnavailableException">Thrown when the Twingly API reports that service is unavailable.</exception>
+        /// <exception cref="TwinglyServiceUnavailableException">Thrown when the Twingly Search API reports that service is unavailable.</exception>
         /// <exception cref="ApiKeyDoesNotExistException">Thrown when the supplied API key was not recognized by the remote server.</exception>
         /// <exception cref="UnauthorizedApiKeyException">
         /// Thrown when the supplied API key can't be used to service the query. 

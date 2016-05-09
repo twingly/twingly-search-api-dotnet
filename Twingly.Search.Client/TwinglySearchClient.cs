@@ -83,7 +83,7 @@ namespace Twingly.Search.Client
         {
             this.internalClient.BaseAddress = new Uri(Constants.ApiBaseAddress);
             this.internalClient.Timeout = TimeSpan.FromMilliseconds(config.RequestTimeoutMilliseconds);
-            UserAgent = "Twingly API Client";
+            UserAgent = "Twingly Search API Client";
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Twingly.Search.Client
         /// <returns>
         /// Result of <paramref name="theQuery"/>.
         /// </returns>
-        /// <exception cref="TwinglyServiceUnavailableException">Thrown when the Twingly API reports that service is unavailable.</exception>
+        /// <exception cref="TwinglyServiceUnavailableException">Thrown when the Twingly Search API reports that service is unavailable.</exception>
         /// <exception cref="ApiKeyDoesNotExistException">Thrown when the supplied API key was not recognized by the remote server.</exception>
         /// <exception cref="UnauthorizedApiKeyException">
         /// Thrown when the supplied API key can't be used to service the query. 
@@ -145,7 +145,7 @@ namespace Twingly.Search.Client
         /// <returns>
         /// Result of <paramref name="theQuery"/>.
         /// </returns>
-        /// <exception cref="TwinglyServiceUnavailableException">Thrown when the Twingly API reports that service is unavailable.</exception>
+        /// <exception cref="TwinglyServiceUnavailableException">Thrown when the Twingly Search API reports that service is unavailable.</exception>
         /// <exception cref="ApiKeyDoesNotExistException">Thrown when the supplied API key was not recognized by the remote server.</exception>
         /// <exception cref="UnauthorizedApiKeyException">
         /// Thrown when the supplied API key can't be used to service the query. 
@@ -177,7 +177,7 @@ namespace Twingly.Search.Client
             if(inner is TaskCanceledException)
                 return new TwinglyRequestException("The request has timed out :(", inner);
             if (String.IsNullOrWhiteSpace(responseString))
-                return new TwinglyRequestException("Twingly API returned an empty response :(", inner);
+                return new TwinglyRequestException("Twingly Search API returned an empty response :(", inner);
             try
             {
                 errorResponse = responseString.DeserializeXml<BlogStream>();
@@ -201,7 +201,7 @@ namespace Twingly.Search.Client
                     // This means that it's reasonable not to be afraid that the responseString is too large.
                     // It also shouldn't contain any sensitive data. Hence, including it into the error message is safe.
                     return new TwinglyRequestException
-                        (String.Format("Twingly API returned an unknown error :( Here's what it says: {0}", responseString), inner);
+                        (String.Format("Twingly Search API returned an unknown error :( Here's what it says: {0}", responseString), inner);
             }
             else
             {
