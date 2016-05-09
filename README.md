@@ -57,7 +57,7 @@ Client exceptions are organized into the following hierachy:
     * ApiKeyNotConfiguredException - thrown when an API key was not found in the config file.
 
 ### Requirements
-* API key, contact sales@twingly.com via twingly.com to get one.
+* API key, [sign up](https://www.twingly.com/try-for-free) via [twingly.com](https://www.twingly.com/) to get one
 * .NET Framework v4.5.2 
 
 ### NuGet publishing
