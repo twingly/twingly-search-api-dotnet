@@ -13,7 +13,7 @@ namespace Twingly.Search.Samples
     /// <summary>
     /// Showcases how to retrieve all matching posts
     /// in a paged manner. Paging is done via the sliding window technique.
-    /// <see cref="https://developer.twingly.com/resources/search/#pagination"/>
+    /// See https://developer.twingly.com/resources/search/#pagination for more details.
     /// </summary>
     public static class PageOverBlogPostsExample
     {
@@ -23,7 +23,7 @@ namespace Twingly.Search.Samples
             Console.WriteLine("-------Running the 'Page over blog posts' example-------");
             
             Query theQuery = QueryBuilder.Create("sort-order:asc sort:published page-size:500 (github) AND (hipchat OR slack)")
-                                                .Build();
+                                         .Build();
 
             ITwinglySearchClient client = new TwinglySearchClient();
             client.UserAgent = "Willy Wonka Chocolate Factory";
@@ -32,13 +32,15 @@ namespace Twingly.Search.Samples
             try
             {
                 QueryResult matchingDocs = client.Query(theQuery);
+                totalResultCount += matchingDocs.Posts.Count;
                 while (!matchingDocs.HasNoMoreResults)
                 {
-                    totalResultCount += matchingDocs.Posts.Count;
-                    theQuery.StartTime = matchingDocs.Posts.Last().Published.AddSeconds(1);
+                    theQuery.StartTime = matchingDocs.Posts.Last().Published;
                     matchingDocs = client.Query(theQuery);
+                    totalResultCount += matchingDocs.Posts.Count;
                 }
             }
+
             catch (TwinglyRequestException ex)
             {
                 Console.WriteLine

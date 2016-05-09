@@ -12,7 +12,9 @@ namespace Twingly.Search.Samples
     /// Demos more advanced query language features, 
     /// such as logical operators and sorting.
     /// </summary>
-    /// <remarks>Learn more about the search language - https://developer.twingly.com/resources/search-language/</remarks>
+    /// <remarks>
+    /// Learn more about the search language - https://developer.twingly.com/resources/search-language/
+    /// </remarks>
     public class AdvancedQueryLanguageExample
     {
 
