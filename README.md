@@ -53,11 +53,11 @@ To learn more about the features of this client, check out the example code in [
 ### Exception handling
 
 Client exceptions are organized into the following hierachy:
-* TwinglyRequestException - base class for any Twingly-related exception
-    * ApiKeyDoesNotExistException - thrown when no API key was found;
-    * UnauthorizedApiKeyException - thrown when API key is not authorized for the action being performed;
-    * TwinglyServiceUnavailableException - thrown when service is not available;
-    * ApiKeyNotConfiguredException - thrown when an API key was not found in the config file.
+* `TwinglyRequestException` - base class for any Twingly-related exception
+    * `ApiKeyDoesNotExistException` - thrown when no API key was found;
+    * `UnauthorizedApiKeyException` - thrown when API key is not authorized for the action being performed;
+    * `TwinglyServiceUnavailableException` - thrown when service is not available;
+    * `ApiKeyNotConfiguredException` - thrown when an API key was not found in the config file.
 
 ### Requirements
 * API key, [sign up](https://www.twingly.com/try-for-free) via [twingly.com](https://www.twingly.com/) to get one
