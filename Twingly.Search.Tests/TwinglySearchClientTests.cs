@@ -86,7 +86,7 @@ namespace Twingly.Search.Tests
             int expectedPostCount = 3;
             double expectedSecondsElapsed = 0.148;
             int expectedNumberOfMatchesTotal = 3;
-            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("minimal_valid_result.xml", request => requestMessage = request);
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("MinimalValidResponse.xml", request => requestMessage = request);
             Query validQuery = QueryBuilder
                                 .Create("A valid query")
                                 .Build();
@@ -160,7 +160,7 @@ namespace Twingly.Search.Tests
             int expectedPostCount = 2;
             double expectedSecondsElapsed = 0.022;
             int expectedNumberOfMatchesTotal = 2;
-            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("valid_non_blog_result.xml", request => requestMessage = request);
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("ValidNonBlogResponse.xml", request => requestMessage = request);
             Query validQuery = QueryBuilder
                                 .Create("A valid query")
                                 .Build();
@@ -242,7 +242,7 @@ namespace Twingly.Search.Tests
         public void When_ReceivedAnUnknownErrorResult_ShouldThrow()
         {
             // Arrange
-            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("undefined_error_result.xml", request => { });
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("UndefinedErrorResponse.xml", request => { });
             Query validQuery = QueryBuilder
                                 .Create("A valid query")
                                 .Build();
