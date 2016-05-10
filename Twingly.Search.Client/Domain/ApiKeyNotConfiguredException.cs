@@ -7,10 +7,11 @@ namespace Twingly.Search.Client.Domain
     /// Occurs when an API key is not found neither in appSettings/TWINGLY_SEARCH_KEY  
     /// nor in the 'TWINGLY_SEARCH_KEY ' environment variable.
     /// </summary>
+    [Serializable]
     public class ApiKeyNotConfiguredException : Exception
     {
         private static readonly string errorMessage =
-            String.Format("Couldn't find an API key. "
+            string.Format("Couldn't find an API key. "
                             + "Please place a valid API key in the appSettings section of the configuration file "
                             + "OR create an environment variable, "
                             + "using '{0}' as the key.", Constants.ApiConfigSettingName);

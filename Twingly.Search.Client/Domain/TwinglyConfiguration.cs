@@ -34,10 +34,14 @@ namespace Twingly.Search.Client.Domain
         /// </param>
         public TwinglyConfiguration(string apiKey, int requestTimeoutMilliseconds)
         {
-            if (String.IsNullOrWhiteSpace(apiKey))
+            if (string.IsNullOrWhiteSpace(apiKey))
+            {
                 throw new ArgumentNullException(nameof(apiKey), "Please supply a valid API key.");
+            }
             if (requestTimeoutMilliseconds <= 0)
+            {
                 throw new ArgumentOutOfRangeException(nameof(requestTimeoutMilliseconds), "Please supply a positive timeout value.");
+            }
 
             this.apiKey = apiKey;
             this.requestTimeoutMilliseconds = requestTimeoutMilliseconds;
@@ -50,7 +54,7 @@ namespace Twingly.Search.Client.Domain
         {
             get
             {
-                return this.apiKey;
+                return apiKey;
             }
         }
 
@@ -61,7 +65,7 @@ namespace Twingly.Search.Client.Domain
         {
             get
             {
-                return this.requestTimeoutMilliseconds;
+                return requestTimeoutMilliseconds;
             }
         }
     }

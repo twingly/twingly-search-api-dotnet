@@ -48,7 +48,7 @@ namespace Twingly.Search.Samples
             // sort by publishing date, oldest posts come first, return 15 results per page.
             string searchPatternTemplate = "sort-order:asc sort:published page-size:15 {0}";
 
-            return String.Format(searchPatternTemplate, keywords);
+            return string.Format(searchPatternTemplate, keywords);
         }
     }
 }

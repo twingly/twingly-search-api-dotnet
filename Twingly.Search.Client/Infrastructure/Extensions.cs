@@ -43,7 +43,7 @@ namespace Twingly.Search.Client.Infrastructure
 
         public static string ReadStreamIntoString(this Stream sourceStream)
         {
-            var returnValue = String.Empty;
+            var returnValue = string.Empty;
             using (StreamReader reader = new StreamReader(sourceStream))
             {
                 returnValue = reader.ReadToEnd();
@@ -65,7 +65,7 @@ namespace Twingly.Search.Client.Infrastructure
                 return targetAttribute.Value;
             }
 
-            return String.Empty;
+            return string.Empty;
         }
     }
 }

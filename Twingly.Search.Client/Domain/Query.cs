@@ -7,7 +7,7 @@ namespace Twingly.Search.Client.Domain
     /// </summary>
     public class Query
     {
-        private string searchPattern = String.Empty;
+        private string searchPattern = string.Empty;
 
         /// <summary>
         /// The pattern to use when searching for blog posts
@@ -24,10 +24,11 @@ namespace Twingly.Search.Client.Domain
 
             set
             {
-                if (String.IsNullOrWhiteSpace(value))
-                    throw new ArgumentOutOfRangeException
-                        ("SearchPattern", "Please provide a non-empty string as a search pattern.");
-                this.searchPattern = value;
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    throw new ArgumentOutOfRangeException("SearchPattern", "Please provide a non-empty string as a search pattern.");
+                }
+                searchPattern = value;
             }
         }
 
@@ -68,7 +69,7 @@ namespace Twingly.Search.Client.Domain
         /// </exception>
         public Query(string searchPattern)
         {
-            this.SearchPattern = searchPattern;
+            SearchPattern = searchPattern;
         }
 
         internal void ThrowIfNotAValidStartTime(DateTime startTime)
@@ -76,24 +77,30 @@ namespace Twingly.Search.Client.Domain
             // allow 'give me the freshest posts' queries by accounting for
             // the delay between forming a query and the server actually receiving it.
             if (startTime > DateTime.UtcNow.AddHours(1))
-                throw new ArgumentOutOfRangeException
-                    (nameof(startTime), "Start time must be a UTC point in the past.");
+            {
+                throw new ArgumentOutOfRangeException(nameof(startTime), "Start time must be a UTC point in the past.");
+            }
         }
 
         internal void ThrowIfNotAValidEndTime(DateTime endTime)
         {
 
-            if (this.StartTime.HasValue && endTime < this.StartTime)
-                throw new ArgumentOutOfRangeException
-                    (nameof(endTime), "End time must be a UTC point in time that comes after the StartTime");
+            if (StartTime.HasValue && endTime < StartTime)
+            {
+                throw new ArgumentOutOfRangeException(nameof(endTime), "End time must be a UTC point in time that comes after the StartTime");
+            }
         }
 
         internal void ThrowIfInvalid()
         {
-            if (this.StartTime.HasValue)
-                ThrowIfNotAValidStartTime(this.StartTime.Value);
-            if (this.EndTime.HasValue)
-                ThrowIfNotAValidEndTime(this.EndTime.Value);
+            if (StartTime.HasValue)
+            {
+                ThrowIfNotAValidStartTime(StartTime.Value);
+            }
+            if (EndTime.HasValue)
+            {
+                ThrowIfNotAValidEndTime(EndTime.Value);
+            }
         }
     }
 }

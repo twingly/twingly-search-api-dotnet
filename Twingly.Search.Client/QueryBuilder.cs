@@ -104,8 +104,10 @@ namespace Twingly.Search.Client
         /// </returns>
         public QueryBuilder Language(string language)
         {
-            if (String.IsNullOrWhiteSpace(language))
+            if (string.IsNullOrWhiteSpace(language))
+            {
                 throw new ArgumentException("Please set this argument to a non-empty string.", nameof(language));
+            }
 
             internalQuery.Language = language;
             return this;

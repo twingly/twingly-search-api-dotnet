@@ -6,10 +6,11 @@ namespace Twingly.Search.Client.Domain
     /// <summary>
     /// Occurs when there is a server communication error during a request.
     /// </summary>
+    [Serializable]
     public class TwinglyRequestException : Exception
     {
         private static readonly string errorMessage =
-            String.Format("An error occured while communicating with the API");
+            string.Format("An error occured while communicating with the API");
 
         public TwinglyRequestException() : base(errorMessage) { }
 

@@ -31,7 +31,7 @@ namespace Twingly.Search.Tests
         public void When_CreatingQueryWithEmptySearchPattern_Then_ShouldThrow()
         {
             // Arrange
-            string searchPattern = String.Empty;
+            string searchPattern = string.Empty;
 
             // Act & Assert
             // Should throw exception now
@@ -92,7 +92,7 @@ namespace Twingly.Search.Tests
                                                 .EndTime(DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)));
 
             // Act & Assert
-            builder.SearchPattern(String.Empty);
+            builder.SearchPattern(string.Empty);
         }
 
         [TestMethod]

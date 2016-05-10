@@ -33,8 +33,10 @@ namespace Twingly.Search.Client.Infrastructure
                 throw new ApiKeyNotConfiguredException(ex);
             }
 
-            if (String.IsNullOrWhiteSpace(returnValue))
+            if (string.IsNullOrWhiteSpace(returnValue))
+            {
                 throw new ApiKeyNotConfiguredException();
+            }
 
             return returnValue;
         }
@@ -47,7 +49,7 @@ namespace Twingly.Search.Client.Infrastructure
             {
                 int convertedValue = 0;
                 string timeoutValue = ReadConfigValue(Constants.TimeoutConfigSettingName);
-                returnValue = Int32.TryParse(timeoutValue, out convertedValue)
+                returnValue = int.TryParse(timeoutValue, out convertedValue)
                     ? convertedValue
                     : Constants.DefaultTimeout;
             }
@@ -63,10 +65,11 @@ namespace Twingly.Search.Client.Infrastructure
 
         private static string ReadConfigValue(string key)
         {
-            string returnValue =
-                ConfigurationManager.AppSettings.Get(key);
-            if (String.IsNullOrWhiteSpace(returnValue))
+            string returnValue = ConfigurationManager.AppSettings.Get(key);
+            if (string.IsNullOrWhiteSpace(returnValue))
+            {
                 returnValue = Environment.GetEnvironmentVariable(key);
+            }
 
             return returnValue;
         }
