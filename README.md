@@ -1,4 +1,4 @@
-# twingly-search-api-dotnet
+# Twingly Search API .NET
 
 [![Build status](https://ci.appveyor.com/api/projects/status/h3ga4nbgue02ufcm?svg=true)](https://ci.appveyor.com/project/Twingly/twingly-search-api-dotnet)
 
@@ -8,46 +8,43 @@
 
 * [Required] Set API key in the appSettings section of your config file:
 
-```cs
-
-  <appSettings>
-    <add key="TWINGLY_SEARCH_KEY" value="YOUR_KEY_GOES_HERE"/>
-  </appSettings>
-
+```xml
+<appSettings>
+  <add key="TWINGLY_SEARCH_KEY" value="YOUR_KEY_GOES_HERE"/>
+</appSettings>
 ```
 
 * [Optional] Set request timeout. The default timeout value is 10 seconds.
-```cs
 
-  <appSettings>
-    <add key="TWINGLY_TIMEOUT_MS" value="REQUEST_TIMEOUT_IN_MILLISECONDS"/>
-  </appSettings>
-
+```xml
+<appSettings>
+  <add key="TWINGLY_TIMEOUT_MS" value="REQUEST_TIMEOUT_IN_MILLISECONDS"/>
+</appSettings>
 ```
 
 * Alternatively: Set these settings in the environment variables. The settings are first read from configuration, then from the environment variables.
 
 ## Example usage
+
 Fetch docs about "Slack" published since yesterday. Limit results to 10 posts.
 
 ```cs
+Query theQuery = QueryBuilder.Create("Slack page-size:10")
+                                    .StartTime(DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)))
+                                    .Build();
 
-    Query theQuery = QueryBuilder.Create("Slack page-size:10")
-                                        .StartTime(DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)))
-                                        .Build();
+ITwinglySearchClient client = new TwinglySearchClient();
+// identify your company by setting the user agent.
+client.UserAgent = "Willy Wonka Chocolate Factory";
 
-    ITwinglySearchClient client = new TwinglySearchClient();
-    // identify your company by setting the user agent.
-    client.UserAgent = "Willy Wonka Chocolate Factory";
-
-    QueryResult matchingDocs = client.Query(theQuery);
-    foreach (var post in matchingDocs.Posts)
-    {
-        Console.WriteLine("Title: '{0}', Date: '{1}', Url: '{2}'",
-        doc.Title, doc.Published, doc.Url);
-    }
-
+QueryResult matchingDocs = client.Query(theQuery);
+foreach (var post in matchingDocs.Posts)
+{
+    Console.WriteLine("Title: '{0}', Date: '{1}', Url: '{2}'",
+    doc.Title, doc.Published, doc.Url);
+}
 ```
+
 To learn more about the features of this client, check out the example code in [Twingly.Search.Samples](Twingly.Search.Samples).
 
 ### Exception handling
@@ -60,10 +57,12 @@ Client exceptions are organized into the following hierachy:
     * `ApiKeyNotConfiguredException` - thrown when an API key was not found in the config file.
 
 ### Requirements
+
 * API key, [sign up](https://www.twingly.com/try-for-free) via [twingly.com](https://www.twingly.com/) to get one
 * .NET Framework v4.5.2
 
 ### NuGet publishing
+
 A NuGet package is automatically generated on each build, using handy [automation scripts by Daniel Schroeder](https://newnugetpackage.codeplex.com/wikipage?title=NuGet%20Package%20To%20Create%20A%20NuGet%20Package%20From%20Your%20Project%20After%20Every%20Build&referringTitle=Home).
 After build, the `'.nupkg'` file is placed in `..Twingly.Search.Client\bin\Release` folder. If you want to publish to Nuget.org manually, you can run `Twingly.Search.Client\_CreateNewNuGetPackage\RunMeToUploadNuGetPackage.cmd`, point it to the `'.nupkg'` file and enter your API key.
 
