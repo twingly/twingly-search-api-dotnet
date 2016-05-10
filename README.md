@@ -41,7 +41,7 @@ QueryResult matchingDocs = client.Query(theQuery);
 foreach (var post in matchingDocs.Posts)
 {
     Console.WriteLine("Title: '{0}', Date: '{1}', Url: '{2}'",
-    doc.Title, doc.Published, doc.Url);
+    post.Title, post.Published, post.Url);
 }
 ```
 
