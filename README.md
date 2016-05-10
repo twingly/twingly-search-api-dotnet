@@ -51,20 +51,28 @@ To learn more about the features of this client, check out the example code in [
 
 Client exceptions are organized into the following hierachy:
 * `TwinglyRequestException` - base class for any Twingly-related exception
-    * `ApiKeyDoesNotExistException` - thrown when no API key was found;
-    * `UnauthorizedApiKeyException` - thrown when API key is not authorized for the action being performed;
-    * `TwinglyServiceUnavailableException` - thrown when service is not available;
-    * `ApiKeyNotConfiguredException` - thrown when an API key was not found in the config file.
+    * `ApiKeyDoesNotExistException` - thrown when no API key was found
+    * `UnauthorizedApiKeyException` - thrown when API key is not authorized for the action being performed
+    * `TwinglyServiceUnavailableException` - thrown when service is not available
+    * `ApiKeyNotConfiguredException` - thrown when an API key was not found in the config file
 
 ### Requirements
 
 * API key, [sign up](https://www.twingly.com/try-for-free) via [twingly.com](https://www.twingly.com/) to get one
 * .NET Framework v4.5.2
 
-### NuGet publishing
+### Release
 
 A NuGet package is automatically generated on each build, using handy [automation scripts by Daniel Schroeder](https://newnugetpackage.codeplex.com/wikipage?title=NuGet%20Package%20To%20Create%20A%20NuGet%20Package%20From%20Your%20Project%20After%20Every%20Build&referringTitle=Home).
-After build, the `'.nupkg'` file is placed in `..Twingly.Search.Client\bin\Release` folder. If you want to publish to Nuget.org manually, you can run `Twingly.Search.Client\_CreateNewNuGetPackage\RunMeToUploadNuGetPackage.cmd`, point it to the `'.nupkg'` file and enter your API key.
+
+1. Bump the version and update the release notes in `Twingly.Search.Client\_CreateNewNuGetPackage\Config.ps1`
+1. Commit the changes
+1. Tag the current commit with the same version number and push it
+1. Build the project `Twingly.Search.Client` in release mode
+  * The `.nupkg` file is placed in the `Twingly.Search.Client\bin\Release` directory
+1. Run `Twingly.Search.Client\_CreateNewNuGetPackage\RunMeToUploadNuGetPackage.cmd`
+1. Point it to the `.nupkg` file
+1. Enter your API key
 
 ## License
 
