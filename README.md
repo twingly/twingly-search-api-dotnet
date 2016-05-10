@@ -4,6 +4,12 @@
 
 .NET client for Twingly Search API (previously known as Twingly Analytics API). Twingly is a blog search service that provides [a searchable API](https://developer.twingly.com/resources/search/).
 
+## Installation
+
+Install via [NuGet](https://www.nuget.org/packages/Twingly.Search.Client/)
+
+    Install-Package Twingly.Search.Client
+
 ## Configuration
 
 * [Required] Set API key in the appSettings section of your config file:
