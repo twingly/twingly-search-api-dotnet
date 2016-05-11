@@ -62,10 +62,30 @@ Client exceptions are organized into the following hierachy:
     * `TwinglyServiceUnavailableException` - thrown when service is not available
     * `ApiKeyNotConfiguredException` - thrown when an API key was not found in the config file
 
-### Requirements
+## Requirements
 
 * API key, [sign up](https://www.twingly.com/try-for-free) via [twingly.com](https://www.twingly.com/) to get one
 * .NET Framework v4.5.2
+
+## Development
+
+### Code coverage
+
+It is possible to check the code coverage by using the tool [OpenCover](https://github.com/OpenCover/opencover).
+
+Prerequisites:
+
+* Install the [OpenCover binary](https://github.com/opencover/opencover/releases) or get it via [NuGet](https://www.nuget.org/packages/opencover)
+* Install the [Visual Studio extension](https://visualstudiogallery.msdn.microsoft.com/6950a046-8919-4935-8542-c6f37956f688)
+
+To use the tool:
+
+1. Open the window `OpenCover Test Explorer`
+1. Group by `Project`
+1. Right-click `Twingly,Search.Tests` and select `Cover with OpenCover`
+1. Open the window `OpenCover Results` to inspect the outcome
+
+Note: The first time you use the Visual Studio extension you will need to give it the path to the OpenCover binary which is typically installed at: `%localappdata%\Apps\OpenCover\OpenCover.Console.exe`
 
 ### Release
 
