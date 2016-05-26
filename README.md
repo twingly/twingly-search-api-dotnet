@@ -92,6 +92,7 @@ Note: The first time you use the Visual Studio extension you will need to give i
 A NuGet package is automatically generated on each build, using handy [automation scripts by Daniel Schroeder](https://newnugetpackage.codeplex.com/wikipage?title=NuGet%20Package%20To%20Create%20A%20NuGet%20Package%20From%20Your%20Project%20After%20Every%20Build&referringTitle=Home).
 
 1. Bump the version and update the release notes in `Twingly.Search.Client\_CreateNewNuGetPackage\Config.ps1`
+1. Bump the `AssemblyVersion` and `AssemblyFileVersion` in `Twingly.Search.Client\Properties\AssemblyInfo.cs`
 1. Commit the changes
 1. Tag the current commit with the same version number and push it
 1. Build the project `Twingly.Search.Client` in release mode
