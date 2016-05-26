@@ -65,7 +65,7 @@ Client exceptions are organized into the following hierachy:
 ## Requirements
 
 * API key, [sign up](https://www.twingly.com/try-for-free) via [twingly.com](https://www.twingly.com/) to get one
-* .NET Framework v4.5.2
+* .NET Framework v4.5.1
 
 ## Development
 
