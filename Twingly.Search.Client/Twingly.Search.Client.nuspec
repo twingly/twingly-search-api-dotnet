@@ -11,10 +11,10 @@
     <iconUrl>https://twingly.files.wordpress.com/2015/01/download.png?w=180</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>$description$</description>
-    <copyright>Copyright © 2016 Andrey Mironoff, Twingly AB</copyright>
+    <copyright>$copyright$</copyright>
     <tags>Twingly</tags>
   </metadata>
   <files>
-    <file src="bin\$configuration$\$id$.XmlSerializers.dll" target="lib/net452" />
+    <file src="bin\$configuration$\$id$.XmlSerializers.dll" target="lib/net451" />
   </files>
 </package>
