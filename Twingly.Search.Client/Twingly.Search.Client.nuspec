@@ -11,7 +11,7 @@
     <iconUrl>https://twingly.files.wordpress.com/2015/01/download.png?w=180</iconUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>$description$</description>
-    <copyright>Twingly AB</copyright>
+    <copyright>$copyright$</copyright>
     <tags>Twingly</tags>
   </metadata>
   <files>
