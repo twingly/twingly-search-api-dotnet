@@ -5,6 +5,7 @@ packages
 .vs
 .suo
 *.csproj.user
+OpenCover
 
 # Windows image file caches
 Thumbs.db
