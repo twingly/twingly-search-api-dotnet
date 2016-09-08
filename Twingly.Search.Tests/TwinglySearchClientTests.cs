@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading;
 using Twingly.Search.Client;
 using Twingly.Search.Client.Domain;
@@ -13,33 +14,33 @@ using Twingly.Search.Client.Infrastructure;
 
 namespace Twingly.Search.Tests
 {
-    [TestClass]
-    [DeploymentItem(@"TestData")]
+    [TestFixture]
     public class TwinglySearchClientTests
     {
-        [TestMethod]
+        [Test]
         public void When_ApiKeyConfigured_Then_ShouldReadSuccessfully()
         {
             // Arrange, Act, Assert, all in one line!
-            var client = new TwinglySearchClient(new FakeValidConfiguration(), new HttpClient());
+            new TwinglySearchClient(new FakeValidConfiguration(), new HttpClient());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentNullException),
-            "Failed to throw an exception when a null Query was supplied")]
+        [Test]
         public void When_QueryIsNull_Then_ShouldThrow()
         {
             // Arrange
             var client = new TwinglySearchClient(new FakeValidConfiguration(), new HttpClient());
 
             // Act & Assert
-            client.Query(null);
+            Assert.Throws<ArgumentNullException>(
+                () => { client.Query(null); },
+                "Failed to throw an exception when a null Query was supplied"
+            );
         }
 
-        [TestMethod]
+        [Test]
         public void When_SearchPatternSet_Then_ShouldSendRequest()
         {
-            // Arrange 
+            // Arrange
             bool isServiceCalled = false;
             TwinglySearchClient client =
                 SetupTwinglyClientWithResponseFile("SuccessfulApiResponse.5posts.xml", request => isServiceCalled = true);
@@ -52,10 +53,10 @@ namespace Twingly.Search.Tests
             Assert.IsTrue(isServiceCalled);
         }
 
-        [TestMethod]
+        [Test]
         public void When_AllArgumentsSetCorrectly_Then_ShouldSerializeToRequestString()
         {
-            // Arrange 
+            // Arrange
             HttpRequestMessage requestMessage = null;
             TwinglySearchClient client = SetupTwinglyClientWithResponseFile("SuccessfulApiResponse.5posts.xml", request => requestMessage = request);
             Query validQuery = QueryBuilder
@@ -78,10 +79,10 @@ namespace Twingly.Search.Tests
             Assert.AreEqual(client.UserAgent, requestMessage.Headers.UserAgent.ToString());
         }
 
-        [TestMethod]
+        [Test]
         public void When_ResponseIsSuccessful_Then_ShouldDeserialize()
         {
-            // Arrange 
+            // Arrange
             HttpRequestMessage requestMessage = null;
             int expectedPostCount = 3;
             double expectedSecondsElapsed = 0.148;
@@ -152,10 +153,10 @@ namespace Twingly.Search.Tests
             Assert.AreEqual(result.Posts[2].Tags.Count, 0);
         }
 
-        [TestMethod]
+        [Test]
         public void When_ANonBlogRequestIsEncountered_Then_ShouldHandleGracefully()
         {
-            // Arrange 
+            // Arrange
             HttpRequestMessage requestMessage = null;
             int expectedPostCount = 2;
             double expectedSecondsElapsed = 0.022;
@@ -185,10 +186,10 @@ namespace Twingly.Search.Tests
             Assert.AreEqual(result.Posts[0].BlogRank, 1);
         }
 
-        [TestMethod]
+        [Test]
         public void When_UserAgentIsSet_Then_ShouldSerializeToRequestHeader()
         {
-            // Arrange 
+            // Arrange
             HttpRequestMessage requestMessage = null;
             TwinglySearchClient client = SetupTwinglyClientWithResponseFile("SuccessfulApiResponse.5posts.xml", request => requestMessage = request);
             string expectedUserAgent = "Hey, I'm a .NET client!/.NET v." + typeof(TwinglySearchClient).Assembly.GetName().Version;
@@ -204,13 +205,13 @@ namespace Twingly.Search.Tests
             Assert.AreEqual(expectedUserAgent, requestMessage.Headers.UserAgent.ToString());
         }
 
-        [TestMethod]
+        [Test]
         public void When_UserAgentNotSet_Then_ShouldSerializeDefaultToRequestHeader()
         {
-            // Arrange 
+            // Arrange
             HttpRequestMessage requestMessage = null;
             TwinglySearchClient client = SetupTwinglyClientWithResponseFile("SuccessfulApiResponse.5posts.xml", request => requestMessage = request);
-            string expectedUserAgent = "Twingly Search API Client/.NET v." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            string expectedUserAgent = "Twingly Search API Client/.NET v." + typeof(TwinglySearchClient).Assembly.GetName().Version;
             Query validQuery = QueryBuilder
                                 .Create("A valid query")
                                 .Build();
@@ -222,9 +223,7 @@ namespace Twingly.Search.Tests
             Assert.AreEqual(expectedUserAgent, requestMessage.Headers.UserAgent.ToString());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ApiKeyDoesNotExistException),
-            "Failed to throw a proper exception when an API key is not recognized by the server.")]
+        [Test]
         public void When_ApiKeyDoesNotExist_Then_ShouldSaySo()
         {
             // Arrange
@@ -233,12 +232,14 @@ namespace Twingly.Search.Tests
                                 .Create("A valid query")
                                 .Build();
             // Act & Assert
-            client.Query(validQuery);
+
+            Assert.Throws<ApiKeyDoesNotExistException>(
+                () => { client.Query(validQuery); },
+                "Failed to throw a proper exception when an API key is not recognized by the server."
+            );
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(TwinglyRequestException),
-           "Failed to recognize and throw the proper error when server returned an unknown error response.")]
+        [Test]
         public void When_ReceivedAnUnknownErrorResult_ShouldThrow()
         {
             // Arrange
@@ -248,12 +249,13 @@ namespace Twingly.Search.Tests
                                 .Build();
 
             // Act & Assert
-            client.Query(validQuery);
+            Assert.Throws<TwinglyRequestException>(
+                () => { client.Query(validQuery); },
+                "Failed to recognize and throw the proper error when server returned an unknown error response."
+            );
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(UnauthorizedApiKeyException),
-           "Failed to throw a proper exception when an API key is not authorized for this request.")]
+        [Test]
         public void When_ApiKeyNotAuthorized_Then_ShouldSaySo()
         {
             // Arrange
@@ -262,12 +264,13 @@ namespace Twingly.Search.Tests
                                 .Create("A valid query")
                                 .Build();
             // Act & Assert
-            client.Query(validQuery);
+            Assert.Throws<UnauthorizedApiKeyException>(
+                () => { client.Query(validQuery); },
+                "Failed to throw a proper exception when an API key is not authorized for this request."
+            );
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(TwinglyServiceUnavailableException),
-          "Failed to throw a proper exception when the service is unavailable. ")]
+        [Test]
         public void When_ServiceUnavailable_Then_ShouldSaySo()
         {
             // Arrange
@@ -276,12 +279,13 @@ namespace Twingly.Search.Tests
                                 .Create("A valid query")
                                 .Build();
             // Act & Assert
-            client.Query(validQuery);
+            Assert.Throws<TwinglyServiceUnavailableException>(
+                () => { client.Query(validQuery); },
+                "Failed to throw a proper exception when the service is unavailable."
+            );
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(TwinglyRequestException),
-         "Failed to throw a proper exception when the request has timed out ")]
+        [Test]
         public void When_RequestTimesOut_Then_ShouldThrow()
         {
             // Arrange
@@ -291,12 +295,13 @@ namespace Twingly.Search.Tests
                                 .Build();
 
             // Act & Assert
-            client.Query(validQuery);
+            Assert.Throws<TwinglyRequestException>(
+                () => { client.Query(validQuery); },
+                "Failed to throw a proper exception when the request has timed out"
+            );
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(TwinglyRequestException),
-        "Failed to throw a proper exception when the request has timed out ")]
+        [Test]
         public void When_RequestFormatNotRecognized_Then_ShouldThrow()
         {
             // Arrange
@@ -305,12 +310,18 @@ namespace Twingly.Search.Tests
                                 .Create("A valid query")
                                 .Build();
             // Act & Assert
-            client.Query(validQuery);
+            Assert.Throws<TwinglyRequestException>(
+                () => { client.Query(validQuery); },
+                "Failed to throw a proper exception when the request has timed out"
+            );
         }
 
         private static TwinglySearchClient SetupTwinglyClientWithResponseFile(string fileName, Action<HttpRequestMessage> delegateAction)
         {
-            string responseContents = File.ReadAllText(fileName);
+            string executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string fullFilePath = Path.Combine(executableLocation, "TestData", fileName);
+
+            string responseContents = File.ReadAllText(fullFilePath);
             var response = DelegatingHttpClientHandler.GetStreamHttpResponseMessage(responseContents);
             var messageHandler = new DelegatingHttpClientHandler(delegateAction, response);
 
@@ -318,14 +329,13 @@ namespace Twingly.Search.Tests
         }
     }
 
-    [TestClass]
+    [TestFixture]
     public class TwinglySearchClientIntegrationTests
     {
-        [TestMethod]
-        [TestCategory("Integration")]
+        [Test, Explicit]
         public void When_SendingCorrectQuery_ShouldGetResultSuccessfully()
         {
-            // Arrange 
+            // Arrange
             var client = new TwinglySearchClient(new LocalConfiguration(), new HttpClient());
             var theQuery = QueryBuilder.Create("audi page-size:100").Build();
 
@@ -337,18 +347,18 @@ namespace Twingly.Search.Tests
             Assert.IsTrue(response.NumberOfMatchesTotal > 0);
         }
 
-        [TestMethod]
-        [TestCategory("Integration")]
-        [ExpectedException(typeof(ApiKeyDoesNotExistException),
-            "Failed to recognize and throw an error when using a non-existing API key.")]
+        [Test, Explicit]
         public void When_UsingInvalidKey_ShouldThrow()
         {
-            // Arrange 
+            // Arrange
             var client = new TwinglySearchClient(new FakeValidConfiguration(), new HttpClient());
             var theQuery = QueryBuilder.Create("twingly page-size:100").Build();
 
             // Act, Assert (should throw).
-            QueryResult response = client.Query(theQuery);
+            Assert.Throws<ApiKeyDoesNotExistException>(
+                () => { client.Query(theQuery); },
+                "Failed to recognize and throw an error when using a non-existing API key."
+            );
         }
     }
 }
