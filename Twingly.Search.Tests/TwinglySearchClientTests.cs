@@ -21,7 +21,7 @@ namespace Twingly.Search.Tests
         public void When_ApiKeyConfigured_Then_ShouldReadSuccessfully()
         {
             // Arrange, Act, Assert, all in one line!
-            new TwinglySearchClient(new FakeValidConfiguration(), new HttpClient());
+            Assert.DoesNotThrow(() => new TwinglySearchClient(new FakeValidConfiguration(), new HttpClient()));
         }
 
         [Test]
