@@ -191,13 +191,13 @@ namespace Twingly.Search.Tests
             // Arrange
             HttpRequestMessage requestMessage = null;
             TwinglySearchClient client = SetupTwinglyClientWithResponseFile("SuccessfulApiResponse.5posts.xml", request => requestMessage = request);
-            string expectedUserAgent = "Hey, I'm a .NET client!/.NET v." + typeof(TwinglySearchClient).Assembly.GetName().Version;
+            string expectedUserAgent = "Hey I'm a .NET client!/.NET v." + typeof(TwinglySearchClient).Assembly.GetName().Version;
             Query validQuery = QueryBuilder
                                 .Create("A valid query")
                                 .Build();
 
             // Act
-            client.UserAgent = "Hey, I'm a .NET client!";
+            client.UserAgent = "Hey I'm a .NET client!";
             client.Query(validQuery);
 
             // Assert
