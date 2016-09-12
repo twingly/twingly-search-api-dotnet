@@ -6,7 +6,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection;
 using System.Threading;
 using Twingly.Search.Client;
 using Twingly.Search.Client.Domain;
@@ -318,7 +317,7 @@ namespace Twingly.Search.Tests
 
         private static TwinglySearchClient SetupTwinglyClientWithResponseFile(string fileName, Action<HttpRequestMessage> delegateAction)
         {
-            string executableLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string executableLocation = TestContext.CurrentContext.TestDirectory;
             string fullFilePath = Path.Combine(executableLocation, "TestData", fileName);
 
             string responseContents = File.ReadAllText(fullFilePath);
