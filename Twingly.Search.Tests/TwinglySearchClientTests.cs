@@ -205,6 +205,20 @@ namespace Twingly.Search.Tests
         }
 
         [Test]
+        public void When_UserAgentIsSetToInvalidValue_Then_ShouldThrow()
+        {
+            // Arrange
+            HttpRequestMessage requestMessage = null;
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("SuccessfulApiResponse.5posts.xml", request => requestMessage = request);
+
+            // Act
+            Assert.Throws<FormatException>(
+                () => { client.UserAgent = "User,Agent"; },
+                "Failed to throw a proper exception when an invalid user agent was set."
+            );
+        }
+
+        [Test]
         public void When_UserAgentNotSet_Then_ShouldSerializeDefaultToRequestHeader()
         {
             // Arrange

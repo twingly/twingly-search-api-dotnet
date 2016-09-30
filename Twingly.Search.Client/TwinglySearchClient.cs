@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace Twingly.Search.Client
         private readonly TwinglyConfiguration config = null;
         private static readonly string requestFormat = "?key={0}&" + Constants.SearchPattern + "={1}&xmloutputversion=2";
 
-        private static readonly string userAgentTemplate = "{0}/.NET v." + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+        private static readonly string userAgentTemplate = "{0}/.NET v." + Assembly.GetExecutingAssembly().GetName().Version;
 
         private string userAgent = null;
 
@@ -38,8 +39,9 @@ namespace Twingly.Search.Client
                 if (!string.IsNullOrWhiteSpace(value))
                 {
                     userAgent = string.Format(userAgentTemplate, value);
-                    internalClient.DefaultRequestHeaders.Remove("User-Agent");
-                    internalClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", UserAgent);
+
+                    internalClient.DefaultRequestHeaders.UserAgent.Clear();
+                    internalClient.DefaultRequestHeaders.UserAgent.ParseAdd(userAgent);
                 }
             }
         }
@@ -93,7 +95,7 @@ namespace Twingly.Search.Client
         /// <exception cref="TwinglyServiceUnavailableException">Thrown when the Twingly Search API reports that service is unavailable.</exception>
         /// <exception cref="ApiKeyDoesNotExistException">Thrown when the supplied API key was not recognized by the remote server.</exception>
         /// <exception cref="UnauthorizedApiKeyException">
-        /// Thrown when the supplied API key can't be used to service the query. 
+        /// Thrown when the supplied API key can't be used to service the query.
         /// </exception>
         /// <exception cref="TwinglyRequestException">Thrown when any other error occurs.</exception>
         public async Task<QueryResult> QueryAsync(Query theQuery)
@@ -145,7 +147,7 @@ namespace Twingly.Search.Client
         /// <exception cref="TwinglyServiceUnavailableException">Thrown when the Twingly Search API reports that service is unavailable.</exception>
         /// <exception cref="ApiKeyDoesNotExistException">Thrown when the supplied API key was not recognized by the remote server.</exception>
         /// <exception cref="UnauthorizedApiKeyException">
-        /// Thrown when the supplied API key can't be used to service the query. 
+        /// Thrown when the supplied API key can't be used to service the query.
         /// </exception>
         /// <exception cref="TwinglyRequestException">Thrown when any other error occurs.</exception>
         public QueryResult Query(Query theQuery)
