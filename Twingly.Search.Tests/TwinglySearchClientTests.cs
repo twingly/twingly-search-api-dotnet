@@ -125,6 +125,81 @@ namespace Twingly.Search.Tests
         }
 
         [Test]
+        public void When_ResultWasIncomplete_Then_ShouldSetIncompleteCorrectly()
+        {
+            // Arrange
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("IncompleteResponse.xml", request => { });
+            Query validQuery = QueryBuilder
+                .Create("A valid query")
+                .Build();
+
+            // Act
+            QueryResult result = client.Query(validQuery);
+
+            // Assert
+            Assert.AreEqual(true, result.IncompleteResult);
+        }
+
+        [Test]
+        public void When_ResultHasCoordinates_Then_ShouldSetCoordinates()
+        {
+            // Arrange
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("ValidCoordinatesResponse.xml", request => { });
+            Query validQuery = QueryBuilder
+                .Create("A valid query")
+                .Build();
+
+            // Act
+            QueryResult result = client.Query(validQuery);
+
+            // Assert
+            Assert.AreEqual(49.1, result.Posts.First().Coordinates.Latitude);
+            Assert.AreEqual(10.75, result.Posts.First().Coordinates.Longitude);
+        }
+
+        [Test]
+        public void When_ResultHasLinks_Then_ShouldSetLinks()
+        {
+            // Arrange
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("ValidLinksResponse.xml", request => { });
+            Query validQuery = QueryBuilder
+                .Create("A valid query")
+                .Build();
+
+            // Act
+            QueryResult result = client.Query(validQuery);
+
+            // Assert
+            var expectedLinks = new[]
+            {
+                "https://1.bp.blogspot.com/-4uNjjiNQiug/WKguo1sBxwI/AAAAAAAAqKE/_eR7cY8Ft3cd2fYCx-2yXK8AwSHE_A2GgCLcB/s1600/aaea427ee3eaaf8f47d650f48fdf1242.jpg",
+                "http://www.irsn.fr/EN/newsroom/News/Pages/20170213_Detection-of-radioactive-iodine-at-trace-levels-in-Europe-in-January-2017.aspx",
+                "https://www.t.co/2P4IDmovzH",
+                "https://www.twitter.com/Strat2Intel/status/832710701730844672"
+            };
+
+            CollectionAssert.AreEqual(expectedLinks, result.Posts.First().Links);
+        }
+
+        [Test]
+        public void When_ResultIsEmpty_Then_ShouldDeserialize()
+        {
+            // Arrange
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("ValidEmptyResponse.xml", request => { });
+            Query validQuery = QueryBuilder
+                .Create("A valid query")
+                .Build();
+
+            // Act
+            QueryResult result = client.Query(validQuery);
+
+            // Assert
+            Assert.AreEqual(0, result.Posts.Count);
+            Assert.AreEqual(0, result.NumberOfMatchesReturned);
+            Assert.AreEqual(0, result.NumberOfMatchesTotal);
+        }
+
+        [Test]
         public void When_UserAgentIsSet_Then_ShouldSerializeToRequestHeader()
         {
             // Arrange
