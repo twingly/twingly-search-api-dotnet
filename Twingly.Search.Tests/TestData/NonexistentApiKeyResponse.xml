@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<error code="40001">
+  <message>Parameter apikey may not be empty</message>
+</error>

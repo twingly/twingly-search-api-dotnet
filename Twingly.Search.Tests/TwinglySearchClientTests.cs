@@ -5,10 +5,13 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
+using System.Web;
 using Twingly.Search.Client;
 using Twingly.Search.Client.Domain;
+using Twingly.Search.Client.Exception;
 using Twingly.Search.Client.Infrastructure;
 
 namespace Twingly.Search.Tests
@@ -37,12 +40,12 @@ namespace Twingly.Search.Tests
         }
 
         [Test]
-        public void When_SearchPatternSet_Then_ShouldSendRequest()
+        public void When_SearchQuerySet_Then_ShouldSendRequest()
         {
             // Arrange
             bool isServiceCalled = false;
             TwinglySearchClient client =
-                SetupTwinglyClientWithResponseFile("SuccessfulApiResponse.5posts.xml", request => isServiceCalled = true);
+                SetupTwinglyClientWithResponseFile("MinimalValidResponse.xml", request => isServiceCalled = true);
             Query validQuery = QueryBuilder.Create("A valid query").Build();
 
             // Act
@@ -57,23 +60,23 @@ namespace Twingly.Search.Tests
         {
             // Arrange
             HttpRequestMessage requestMessage = null;
-            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("SuccessfulApiResponse.5posts.xml", request => requestMessage = request);
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("MinimalValidResponse.xml", request => requestMessage = request);
             Query validQuery = QueryBuilder
-                                .Create("A valid query")
+                                .Create("A valid query lang:ru")
                                 .StartTime(DateTime.UtcNow)
                                 .EndTime(DateTime.UtcNow.AddDays(1))
-                                .Language(Language.Russian)
                                 .Build();
 
             // Act
             client.Query(validQuery);
-            NameValueCollection serializedParameters = System.Web.HttpUtility.ParseQueryString(requestMessage.RequestUri.Query);
+            NameValueCollection serializedParameters = HttpUtility.ParseQueryString(requestMessage.RequestUri.Query);
 
             // Assert
-            Assert.AreEqual(validQuery.SearchPattern, serializedParameters[Constants.SearchPattern]);
-            Assert.AreEqual(validQuery.StartTime.Value.ToString(Constants.ApiDateFormat), serializedParameters[Constants.StartTime]);
-            Assert.AreEqual(validQuery.EndTime.Value.ToString(Constants.ApiDateFormat), serializedParameters[Constants.EndTime]);
-            Assert.AreEqual(validQuery.Language, serializedParameters[Constants.DocumentLanguage]);
+            var expectedStartTime = validQuery.StartTime.Value.ToString(Constants.ApiDateFormat);
+            var expectedEndTime = validQuery.EndTime.Value.ToString(Constants.ApiDateFormat);
+            var expectedQuery = $"{validQuery.SearchQuery} start-date:{expectedStartTime} end-date:{expectedEndTime}";
+
+            Assert.AreEqual(expectedQuery, serializedParameters[Constants.SearchQuery]);
             Assert.IsNotNull(client.UserAgent);
             Assert.AreEqual(client.UserAgent, requestMessage.Headers.UserAgent.ToString());
         }
@@ -82,10 +85,7 @@ namespace Twingly.Search.Tests
         public void When_ResponseIsSuccessful_Then_ShouldDeserialize()
         {
             // Arrange
-            HttpRequestMessage requestMessage = null;
-            int expectedPostCount = 3;
-            double expectedSecondsElapsed = 0.148;
-            int expectedNumberOfMatchesTotal = 3;
+            HttpRequestMessage requestMessage;
             TwinglySearchClient client = SetupTwinglyClientWithResponseFile("MinimalValidResponse.xml", request => requestMessage = request);
             Query validQuery = QueryBuilder
                                 .Create("A valid query")
@@ -95,94 +95,33 @@ namespace Twingly.Search.Tests
             QueryResult result = client.Query(validQuery);
 
             // Assert
-            Assert.AreEqual(expectedPostCount, result.Posts.Count);
-            Assert.AreEqual(expectedPostCount, result.NumberOfMatchesReturned);
-            Assert.AreEqual(expectedSecondsElapsed, result.SecondsElapsed);
-            Assert.AreEqual(expectedNumberOfMatchesTotal, result.NumberOfMatchesTotal);
-            Assert.AreEqual(result.Posts[0].Url, "http://oppogner.blogg.no/1409602010_bare_m_ha.html");
-            Assert.AreEqual(result.Posts[0].BlogName, "oppogner");
-            Assert.AreEqual(result.Posts[0].BlogUrl, "http://oppogner.blogg.no/");
-            Assert.AreEqual(result.Posts[0].Title, "Bare MÅ ha!");
-            Assert.AreEqual(result.Posts[0].Summary, "Ja, velkommen til høsten...");
-            Assert.AreEqual(result.Posts[0].LanguageCode, "no");
-            Assert.AreEqual(result.Posts[0].Published, DateTime.Parse("2014-09-02 06:53:26Z", null, DateTimeStyles.AdjustToUniversal));
-            Assert.AreEqual(result.Posts[0].Indexed, DateTime.Parse("2014-09-02 09:00:53Z", null, DateTimeStyles.AdjustToUniversal));
-            Assert.AreEqual(result.Posts[0].Authority, 1);
-            Assert.AreEqual(result.Posts[0].BlogRank, 1);
-            Assert.AreEqual(result.Posts[0].Tags.Count, 1);
-            Assert.AreEqual(result.Posts[0].Tags.First(), "Blogg");
+            var firstPost = result.Posts.First();
 
-            Assert.AreEqual(result.Posts[1].Url, "http://www.skvallernytt.se/hardtraning-da-galler-swedish-house-mafia");
-            Assert.AreEqual(result.Posts[1].BlogName, "Skvallernytt.se");
-            Assert.AreEqual(result.Posts[1].BlogUrl, "http://www.skvallernytt.se/");
-            Assert.AreEqual(result.Posts[1].Title, "Hårdträning – då gäller Swedish House Mafia");
-            Assert.AreEqual(result.Posts[1].Summary, "Träning.Och Swedish House Mafia.Det verkar vara ett lyckat koncept." +
-                                                    " \"Don't you worry child\" och \"Greyhound\" är nämligen de två mest spelade" +
-                                                    " träningslåtarna under januari 2013 på Spotify.\n\nRelaterade inlägg:\nSwedish House Mafia" +
-                                                    " – ny låt!\nNy knivattack på Swedish House Mafia-konsert\nSwedish House Mafia gör succé i USA");
-            Assert.AreEqual(result.Posts[1].LanguageCode, "sv");
-            Assert.AreEqual(result.Posts[1].Published, DateTime.Parse("2013-01-29 15:21:56Z", null, DateTimeStyles.AdjustToUniversal));
-            Assert.AreEqual(result.Posts[1].Indexed, DateTime.Parse("2013-01-29 15:22:52Z", null, DateTimeStyles.AdjustToUniversal));
-            Assert.AreEqual(result.Posts[1].Authority, 38);
-            Assert.AreEqual(result.Posts[1].BlogRank, 4);
-            Assert.AreEqual(result.Posts[1].Tags.Count, 5);
-
-            CollectionAssert.AreEqual(result.Posts[1].Tags, new List<string>()
-            {
-                "Okategoriserat",
-                "Träning",
-                "greyhound",
-                "koncept",
-                "mafia"
-            });
-
-            Assert.AreEqual(result.Posts[2].Url, "http://didriksinspesielleverden.blogg.no/1359472349_justin_bieber.html");
-            Assert.AreEqual(result.Posts[2].BlogName, "Didriksinspesielleverden");
-            Assert.AreEqual(result.Posts[2].BlogUrl, "http://didriksinspesielleverden.blogg.no/");
-            Assert.AreEqual(result.Posts[2].Title, "Justin Bieber");
-            Assert.AreEqual(result.Posts[2].Summary, "OMG! Justin Bieber Believe acoustic albumet" +
-                                                     " er nå ute på spotify.Han er helt super.Love him." +
-                                                     "Personlig liker jeg best beauty and a beat og as long" +
-                                                     " as you love me, kommenter gjerne hva dere synes! <3 #sus YOLO");
-            Assert.AreEqual(result.Posts[2].LanguageCode, "no");
-            Assert.AreEqual(result.Posts[2].Published, DateTime.Parse("2013-01-29 15:12:29Z", null, DateTimeStyles.AdjustToUniversal));
-            Assert.AreEqual(result.Posts[2].Indexed, DateTime.Parse("2013-01-29 15:14:37Z", null, DateTimeStyles.AdjustToUniversal));
-            Assert.AreEqual(result.Posts[2].Authority, 0);
-            Assert.AreEqual(result.Posts[2].BlogRank, 1);
-            Assert.AreEqual(result.Posts[2].Tags.Count, 0);
-        }
-
-        [Test]
-        public void When_ANonBlogRequestIsEncountered_Then_ShouldHandleGracefully()
-        {
-            // Arrange
-            HttpRequestMessage requestMessage = null;
-            int expectedPostCount = 2;
-            double expectedSecondsElapsed = 0.022;
-            int expectedNumberOfMatchesTotal = 2;
-            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("ValidNonBlogResponse.xml", request => requestMessage = request);
-            Query validQuery = QueryBuilder
-                                .Create("A valid query")
-                                .Build();
-
-            // Act
-            QueryResult result = client.Query(validQuery);
-
-            // Assert
-            Assert.AreEqual(expectedPostCount, result.NumberOfMatchesReturned);
-            Assert.AreEqual(expectedNumberOfMatchesTotal, result.NumberOfMatchesTotal);
-            Assert.AreEqual(expectedSecondsElapsed, result.SecondsElapsed);
-            Assert.AreEqual(result.Posts.Count, 1);
-            Assert.AreEqual(result.Posts[0].Url, "http://www.someotherurl.com/post");
-            Assert.AreEqual(result.Posts[0].BlogName, "Blog Name");
-            Assert.AreEqual(result.Posts[0].BlogUrl, "http://www.someotherurl.com/");
-            Assert.IsFalse(result.Posts[0].Tags.Any());
-            Assert.AreEqual(result.Posts[0].Summary, "Summary");
-            Assert.AreEqual(result.Posts[0].LanguageCode, "sv");
-            Assert.AreEqual(result.Posts[0].Published, DateTime.Parse("2013-01-29 15:26:33Z", null, DateTimeStyles.AdjustToUniversal));
-            Assert.AreEqual(result.Posts[0].Indexed, DateTime.Parse("2013-01-29 15:27:07Z", null, DateTimeStyles.AdjustToUniversal));
-            Assert.AreEqual(result.Posts[0].Authority, 0);
-            Assert.AreEqual(result.Posts[0].BlogRank, 1);
+            Assert.AreEqual(3, result.Posts.Count);
+            Assert.AreEqual(3, result.NumberOfMatchesReturned);
+            Assert.AreEqual(0.369, result.SecondsElapsed);
+            Assert.AreEqual(3122050, result.NumberOfMatchesTotal);
+            Assert.AreEqual("16405819479794412880", firstPost.Id);
+            Assert.AreEqual("klivinihemligheten", firstPost.Author);
+            Assert.AreEqual("http://nouw.com/klivinihemligheten/planering---men-dalig-30016048", firstPost.Url);
+            Assert.AreEqual("Planering - men dålig", firstPost.Title);
+            Assert.AreEqual("Det vart en förmiddag på boxen med en brud som jag lärt känna där. Körde en egen WOD, bland annat SDHP, shoulder press, HSPU - bland annat. Hade planerat dagen in i minsta detalj, insåg under passet att jag glömt leggings. Så - det var bara att sluta lite tidigare för att röra sig hemåt för dusch och lunch. Har alltså släpat med mig ryggsäcken med allt för dagen i onödan. Riktigt riktigt klantigt! Har nu en timma på mig att duscha och göra mig ordning för föreläsning, innan det är dags att dra igen. Och jag som skulle plugga innan", firstPost.Text);
+            Assert.AreEqual("sv", firstPost.LanguageCode);
+            Assert.AreEqual("se", firstPost.LocationCode);
+            Assert.AreEqual(null, firstPost.Coordinates.Longitude);
+            Assert.AreEqual(null, firstPost.Coordinates.Latitude);
+            Assert.AreEqual(0, firstPost.Links.Count);
+            CollectionAssert.AreEqual(new [] { "Ätas & drickas", "Universitet & studentlivet", "Träning", "To to list"}, firstPost.Tags);
+            Assert.AreEqual(firstPost.Images.Count, 0);
+            Assert.AreEqual(DateTime.Parse("2017-05-04T06:51:23Z"), firstPost.IndexedAt);
+            Assert.AreEqual(DateTime.Parse("2017-05-04T06:50:59Z"), firstPost.PublishedAt);
+            Assert.AreEqual(DateTime.Parse("2017-05-04T08:51:23Z"), firstPost.ReindexedAt);
+            Assert.AreEqual(0, firstPost.InLinksCount);
+            Assert.AreEqual("5312283800049632348", firstPost.BlogId);
+            Assert.AreEqual("Love life like a student", firstPost.BlogName);
+            Assert.AreEqual("http://nouw.com/klivinihemligheten", firstPost.BlogUrl);
+            Assert.AreEqual(1, firstPost.BlogRank);
+            Assert.AreEqual(0, firstPost.Authority);
         }
 
         [Test]
@@ -190,7 +129,7 @@ namespace Twingly.Search.Tests
         {
             // Arrange
             HttpRequestMessage requestMessage = null;
-            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("SuccessfulApiResponse.5posts.xml", request => requestMessage = request);
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("MinimalValidResponse.xml", request => requestMessage = request);
             string expectedUserAgent = "Hey I'm a .NET client!/.NET v." + typeof(TwinglySearchClient).Assembly.GetName().Version;
             Query validQuery = QueryBuilder
                                 .Create("A valid query")
@@ -209,7 +148,7 @@ namespace Twingly.Search.Tests
         {
             // Arrange
             HttpRequestMessage requestMessage = null;
-            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("SuccessfulApiResponse.5posts.xml", request => requestMessage = request);
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("MinimalValidResponse.xml", request => requestMessage = request);
 
             // Act
             Assert.Throws<FormatException>(
@@ -223,7 +162,7 @@ namespace Twingly.Search.Tests
         {
             // Arrange
             HttpRequestMessage requestMessage = null;
-            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("SuccessfulApiResponse.5posts.xml", request => requestMessage = request);
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("MinimalValidResponse.xml", request => requestMessage = request);
             string expectedUserAgent = "Twingly Search API Client/.NET v." + typeof(TwinglySearchClient).Assembly.GetName().Version;
             Query validQuery = QueryBuilder
                                 .Create("A valid query")
@@ -240,13 +179,13 @@ namespace Twingly.Search.Tests
         public void When_ApiKeyDoesNotExist_Then_ShouldSaySo()
         {
             // Arrange
-            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("ApiKeyDoesNotExistResponse.xml", request => { });
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("NonexistentApiKeyResponse.xml", request => { }, HttpStatusCode.BadRequest);
             Query validQuery = QueryBuilder
                                 .Create("A valid query")
                                 .Build();
             // Act & Assert
 
-            Assert.Throws<ApiKeyDoesNotExistException>(
+            Assert.Throws<QueryException>(
                 () => { client.Query(validQuery); },
                 "Failed to throw a proper exception when an API key is not recognized by the server."
             );
@@ -256,13 +195,13 @@ namespace Twingly.Search.Tests
         public void When_ReceivedAnUnknownErrorResult_ShouldThrow()
         {
             // Arrange
-            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("UndefinedErrorResponse.xml", request => { });
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("UndefinedErrorResponse.xml", request => { }, HttpStatusCode.InternalServerError);
             Query validQuery = QueryBuilder
                                 .Create("A valid query")
                                 .Build();
 
             // Act & Assert
-            Assert.Throws<TwinglyRequestException>(
+            Assert.Throws<ServerException>(
                 () => { client.Query(validQuery); },
                 "Failed to recognize and throw the proper error when server returned an unknown error response."
             );
@@ -272,12 +211,12 @@ namespace Twingly.Search.Tests
         public void When_ApiKeyNotAuthorized_Then_ShouldSaySo()
         {
             // Arrange
-            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("UnauthorizedApiKeyResponse.xml", request => { });
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("UnauthorizedApiKeyResponse.xml", request => { }, HttpStatusCode.Unauthorized);
             Query validQuery = QueryBuilder
                                 .Create("A valid query")
                                 .Build();
             // Act & Assert
-            Assert.Throws<UnauthorizedApiKeyException>(
+            Assert.Throws<AuthException>(
                 () => { client.Query(validQuery); },
                 "Failed to throw a proper exception when an API key is not authorized for this request."
             );
@@ -287,12 +226,12 @@ namespace Twingly.Search.Tests
         public void When_ServiceUnavailable_Then_ShouldSaySo()
         {
             // Arrange
-            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("ServiceUnavailableResponse.xml", request => { });
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("ServiceUnavailableResponse.xml", request => { }, HttpStatusCode.ServiceUnavailable);
             Query validQuery = QueryBuilder
                                 .Create("A valid query")
                                 .Build();
             // Act & Assert
-            Assert.Throws<TwinglyServiceUnavailableException>(
+            Assert.Throws<ServerException>(
                 () => { client.Query(validQuery); },
                 "Failed to throw a proper exception when the service is unavailable."
             );
@@ -308,7 +247,7 @@ namespace Twingly.Search.Tests
                                 .Build();
 
             // Act & Assert
-            Assert.Throws<TwinglyRequestException>(
+            Assert.Throws<RequestException>(
                 () => { client.Query(validQuery); },
                 "Failed to throw a proper exception when the request has timed out"
             );
@@ -318,24 +257,24 @@ namespace Twingly.Search.Tests
         public void When_RequestFormatNotRecognized_Then_ShouldThrow()
         {
             // Arrange
-            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("UnknownFormatResponse.xml", request => { });
+            TwinglySearchClient client = SetupTwinglyClientWithResponseFile("NonXmlResponse.xml", request => { }, HttpStatusCode.InternalServerError);
             Query validQuery = QueryBuilder
                                 .Create("A valid query")
                                 .Build();
             // Act & Assert
-            Assert.Throws<TwinglyRequestException>(
+            Assert.Throws<RequestException>(
                 () => { client.Query(validQuery); },
                 "Failed to throw a proper exception when the request has timed out"
             );
         }
 
-        private static TwinglySearchClient SetupTwinglyClientWithResponseFile(string fileName, Action<HttpRequestMessage> delegateAction)
+        private static TwinglySearchClient SetupTwinglyClientWithResponseFile(string fileName, Action<HttpRequestMessage> delegateAction, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
             string executableLocation = TestContext.CurrentContext.TestDirectory;
             string fullFilePath = Path.Combine(executableLocation, "TestData", fileName);
 
             string responseContents = File.ReadAllText(fullFilePath);
-            var response = DelegatingHttpClientHandler.GetStreamHttpResponseMessage(responseContents);
+            var response = DelegatingHttpClientHandler.GetStreamHttpResponseMessage(responseContents, statusCode);
             var messageHandler = new DelegatingHttpClientHandler(delegateAction, response);
 
             return new TwinglySearchClient(new FakeValidConfiguration(), new HttpClient(messageHandler));
@@ -368,7 +307,7 @@ namespace Twingly.Search.Tests
             var theQuery = QueryBuilder.Create("twingly page-size:100").Build();
 
             // Act, Assert (should throw).
-            Assert.Throws<ApiKeyDoesNotExistException>(
+            Assert.Throws<AuthException>(
                 () => { client.Query(theQuery); },
                 "Failed to recognize and throw an error when using a non-existing API key."
             );

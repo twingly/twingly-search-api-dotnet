@@ -33,15 +33,12 @@ namespace Twingly.Search.Client.Domain
         [XmlAttribute(AttributeName = "numberOfMatchesTotal")]
         public long NumberOfMatchesTotal { get; set; }
 
+        [XmlAttribute(AttributeName = "incompleteResult")]
+        public bool IncompleteResult { get; set; }
+
         /// <summary>
         /// Returns a value indicating whether there are any more results in the result set.
         /// </summary>
-        public bool HasNoMoreResults
-        {
-            get
-            {
-                return NumberOfMatchesReturned == NumberOfMatchesTotal;
-            }
-        }
+        public bool HasNoMoreResults => NumberOfMatchesReturned == NumberOfMatchesTotal;
     }
 }

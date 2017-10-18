@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using Twingly.Search.Client.Domain;
+using Twingly.Search.Client.Exception;
 
 namespace Twingly.Search.Client.Infrastructure
 {
@@ -21,14 +22,14 @@ namespace Twingly.Search.Client.Infrastructure
 
         private static string ReadApiKeyFromConfig()
         {
-            string returnValue = null;
+            string returnValue;
 
             try
             {
                 returnValue = ReadConfigValue(Constants.ApiConfigSettingName);
             }
 
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 throw new ApiKeyNotConfiguredException(ex);
             }
@@ -43,18 +44,17 @@ namespace Twingly.Search.Client.Infrastructure
 
         private static int ReadRequestTimeoutFromConfig()
         {
-            int? returnValue = null;
+            int? returnValue;
 
             try
             {
-                int convertedValue = 0;
                 string timeoutValue = ReadConfigValue(Constants.TimeoutConfigSettingName);
-                returnValue = int.TryParse(timeoutValue, out convertedValue)
+                returnValue = int.TryParse(timeoutValue, out var convertedValue)
                     ? convertedValue
                     : Constants.DefaultTimeout;
             }
 
-            catch (Exception)
+            catch (System.Exception)
             {
                 // handle gracefully, we'll use a default value.
                 returnValue = Constants.DefaultTimeout;

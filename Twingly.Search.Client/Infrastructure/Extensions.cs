@@ -10,31 +10,31 @@ namespace Twingly.Search.Client.Infrastructure
 {
     internal static class Extensions
     {
-        private static readonly ConcurrentDictionary<Type, XmlSerializer> serializerCache =
+        private static readonly ConcurrentDictionary<Type, XmlSerializer> SerializerCache =
             new ConcurrentDictionary<Type, XmlSerializer>();
 
         public static T DeserializeXml<T>(this string xmlString)
         {
             T returnValue = default(T);
             Type objType = typeof(T);
-            XmlSerializer serializer = null;
-            if (serializerCache.ContainsKey(objType))
+            XmlSerializer serializer;
+            if (SerializerCache.ContainsKey(objType))
             {
-                serializer = serializerCache[objType];
+                serializer = SerializerCache[objType];
             }
             else
             {
                 serializer = new XmlSerializer(objType);
-                serializerCache[objType] = serializer;
+                SerializerCache[objType] = serializer;
             }
 
             using (StringReader reader = new StringReader(xmlString))
             {
                 object result = serializer.Deserialize(reader);
 
-                if (result != null && result is T)
+                if (result is T variable)
                 {
-                    returnValue = ((T)result);
+                    returnValue = variable;
                 }
             }
 
@@ -43,7 +43,7 @@ namespace Twingly.Search.Client.Infrastructure
 
         public static string ReadStreamIntoString(this Stream sourceStream)
         {
-            var returnValue = string.Empty;
+            string returnValue;
             using (StreamReader reader = new StreamReader(sourceStream))
             {
                 returnValue = reader.ReadToEnd();

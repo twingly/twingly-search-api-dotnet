@@ -9,38 +9,39 @@ namespace Twingly.Search.Client
     /// </summary>
     public class QueryBuilder
     {
-        private Query internalQuery = null;
+        private readonly Query _internalQuery;
 
-        private QueryBuilder(string searchPattern)
+        private QueryBuilder(string searchQuery)
         {
-            internalQuery = new Query(searchPattern);
+            _internalQuery = new Query(searchQuery);
         }
 
         /// <summary>
-        /// Creates a new query builder with the specified search pattern.
+        /// Creates a new query builder with the specified search query.
         /// </summary>
-        /// <param name="searchPattern">The pattern to use when searching for blog posts.</param>
+        /// <param name="searchQuery">The query to use when searching for blog posts.</param>
         /// <returns>A new query builder.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown when the specified search pattern is a null or empty string.
+        /// Thrown when the specified search query is a null or empty string.
         /// </exception>
-        public static QueryBuilder Create(string searchPattern)
+        public static QueryBuilder Create(string searchQuery)
         {
-            return new QueryBuilder(searchPattern);
+            return new QueryBuilder(searchQuery);
         }
 
         /// <summary>
-        /// Sets the pattern to use when searching for blog posts.
+        /// Sets the query to use when searching for blog posts.
         /// </summary>
-        /// <param name="searchPattern">The pattern to use when searching for blog posts.</param>
-        /// <returns>A half-baked query with the given <paramref name="searchPattern"/>.</returns>
+        /// <param name="query">The query to use when searching for blog posts.</param>
+        /// <returns>A half-baked query with the given <paramref name="query"/>.</returns>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown when the specified search pattern is a null or empty string.
+        /// Thrown when the specified search query is a null or empty string.
         /// </exception>
         /// <see cref="https://developer.twingly.com/resources/search-language/"/>
-        public QueryBuilder SearchPattern(string searchPattern)
+        public QueryBuilder SearchQuery(string query)
         {
-            internalQuery.SearchPattern = searchPattern;
+            _internalQuery.SearchQuery = query;
+
             return this;
         }
 
@@ -56,8 +57,8 @@ namespace Twingly.Search.Client
         /// </exception>
         public QueryBuilder StartTime(DateTime targetDate)
         {
-            internalQuery.ThrowIfNotAValidStartTime(targetDate);
-            internalQuery.StartTime = targetDate;
+            _internalQuery.ThrowIfNotAValidStartTime(targetDate);
+            _internalQuery.StartTime = targetDate;
 
             return this;
         }
@@ -73,7 +74,7 @@ namespace Twingly.Search.Client
         {
             // we don't throw exceptions here, because an invalid end date
             // may be due to the property setting order.
-            internalQuery.EndTime = targetDate;
+            _internalQuery.EndTime = targetDate;
 
             return this;
         }
@@ -86,9 +87,11 @@ namespace Twingly.Search.Client
         /// <returns>
         /// A half-baked query with the given <paramref name="language"/>.
         /// </returns>
+        [Obsolete]
         public QueryBuilder Language(Language language)
         {
-            internalQuery.Language = language.GetLanguageValue();
+            _internalQuery.Language = language.GetLanguageValue();
+
             return this;
         }
 
@@ -102,6 +105,7 @@ namespace Twingly.Search.Client
         /// <returns>
         /// A half-baked query with the given <paramref name="language"/>.
         /// </returns>
+        [Obsolete]
         public QueryBuilder Language(string language)
         {
             if (string.IsNullOrWhiteSpace(language))
@@ -109,7 +113,8 @@ namespace Twingly.Search.Client
                 throw new ArgumentException("Please set this argument to a non-empty string.", nameof(language));
             }
 
-            internalQuery.Language = language;
+            _internalQuery.Language = language;
+
             return this;
         }
 
@@ -121,9 +126,9 @@ namespace Twingly.Search.Client
         /// </returns>
         public Query Build()
         {
-            internalQuery.ThrowIfInvalid();
+            _internalQuery.ThrowIfInvalid();
 
-            return internalQuery;
+            return _internalQuery;
         }
     }
 }

@@ -7,9 +7,6 @@ namespace Twingly.Search.Client.Domain
     /// </summary>
     public class TwinglyConfiguration
     {
-        private readonly string apiKey = null;
-        private readonly int requestTimeoutMilliseconds;
-
         /// <summary>
         /// Initializes a new configuration with the specified <paramref name="apiKey"/>
         /// and a 10 second request timeout.
@@ -43,30 +40,18 @@ namespace Twingly.Search.Client.Domain
                 throw new ArgumentOutOfRangeException(nameof(requestTimeoutMilliseconds), "Please supply a positive timeout value.");
             }
 
-            this.apiKey = apiKey;
-            this.requestTimeoutMilliseconds = requestTimeoutMilliseconds;
+            ApiKey = apiKey;
+            RequestTimeoutMilliseconds = requestTimeoutMilliseconds;
         }
 
         /// <summary>
         /// Gets the Twingly Search API key.
         /// </summary>
-        public virtual string ApiKey
-        {
-            get
-            {
-                return apiKey;
-            }
-        }
+        public virtual string ApiKey { get; }
 
         /// <summary>
         /// Gets the configured request timeout.
         /// </summary>
-        public virtual int RequestTimeoutMilliseconds
-        {
-            get
-            {
-                return requestTimeoutMilliseconds;
-            }
-        }
+        public virtual int RequestTimeoutMilliseconds { get; }
     }
 }

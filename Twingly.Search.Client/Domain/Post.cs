@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Xml.Serialization;
 
 namespace Twingly.Search.Client.Domain
@@ -28,8 +27,11 @@ namespace Twingly.Search.Client.Domain
         /// Note that the contents of the element may be large (several kilobytes).
         /// If the content is excessively large we may shorten it to ensure the stability of the service.
         /// </summary>
-        [XmlElement(ElementName = "summary")]
-        public string Summary { get; set; }
+        [XmlElement(ElementName = "text")]
+        public string Text { get; set; }
+
+        [Obsolete("Use Text instead"), XmlIgnore]
+        public string Summary => Text;
 
         /// <summary>
         /// The ISO language code that represents the language the post was written in.
@@ -38,35 +40,29 @@ namespace Twingly.Search.Client.Domain
         public string LanguageCode { get; set; }
 
         /// <summary>
-        /// When the post was published, in UTC. 
+        /// When the post was published, in UTC.
         /// If no publication date could be found in the post,
         /// the date will be set to when the post was indexed.
         /// </summary>
         [XmlIgnore]
-        public DateTime Published
-        {
-            get
-            {
-                return DateTime.Parse(SerializerBackingStringFieldPublished, null, DateTimeStyles.AdjustToUniversal);
-            }
-        }
+        public DateTime PublishedAt => DateTime.Parse(SerializerBackingStringFieldPublished);
 
-        [XmlElement(ElementName = "published")]
+        [Obsolete("Use PublishedAt instead"), XmlIgnore]
+        public DateTime Published => PublishedAt;
+
+        [XmlElement(ElementName = "publishedAt")]
         public string SerializerBackingStringFieldPublished { get; set; }
 
         /// <summary>
         /// When Twingly indexed the post, in UTC.
         /// </summary>
         [XmlIgnore]
-        public DateTime Indexed
-        {
-            get
-            {
-                return DateTime.Parse(SerializerBackingStringFieldIndexed, null, DateTimeStyles.AdjustToUniversal);
-            }
-        }
+        public DateTime IndexedAt => DateTime.Parse(SerializerBackingStringFieldIndexed);
 
-        [XmlElement(ElementName = "indexed")]
+        [Obsolete("Use IndexedAt instead"), XmlIgnore]
+        public DateTime Indexed => IndexedAt;
+
+        [XmlElement(ElementName = "indexedAt")]
         public string SerializerBackingStringFieldIndexed { get; set; }
 
         /// <summary>
@@ -80,6 +76,12 @@ namespace Twingly.Search.Client.Domain
         /// </summary>
         [XmlElement(ElementName = "blogName")]
         public string BlogName { get; set; }
+
+        /// <summary>
+        /// The ID of the blog
+        /// </summary>
+        [XmlElement(ElementName = "blogId")]
+        public string BlogId { get; set; }
 
         /// <summary>
         /// Indicates the authority of the blog, at time of indexing.
@@ -98,11 +100,49 @@ namespace Twingly.Search.Client.Domain
         /// <summary>
         /// The categories and tags used to describe the blog post.
         /// </summary>
-        [XmlArray("tags")]
-        [XmlArrayItem("tag")]
+        [XmlArray("tags"), XmlArrayItem("tag")]
         public List<string> Tags { get; set; }
 
-        [XmlAttribute(AttributeName = "contentType")]
-        public string ContentType { get; set; }
+        /// <summary>
+        /// The blog post ID
+        /// </summary>
+        [XmlElement("id")]
+        public string Id { get; set; }
+
+        /// <summary>
+        /// The blog post author
+        /// </summary>
+        [XmlElement("author")]
+        public string Author { get; set; }
+
+        [XmlElement("locationCode")]
+        public string LocationCode { get; set; }
+
+        [XmlElement("inLinksCount")]
+        public int InLinksCount { get; set; }
+
+        /// <summary>
+        /// When Twingly reindexed the post, in UTC.
+        /// </summary>
+        [XmlIgnore]
+        public DateTime ReindexedAt => DateTime.Parse(SerializerBackingStringFieldReIndexed);
+
+        [XmlElement(ElementName = "reindexedAt")]
+        public string SerializerBackingStringFieldReIndexed { get; set; }
+
+        /// <summary>
+        /// All links from the blog post to other resources.
+        /// </summary>
+        [XmlArray("links"), XmlArrayItem("link")]
+        public List<string> Links { get; set; }
+
+        /// <summary>
+        /// Image URLs from the posts
+        /// </summary>
+        [XmlArray("images"), XmlArrayItem("image")]
+        public List<string> Images { get; set; }
+
+        [XmlElement("coordinates")]
+        public Coordinate Coordinates { get; set; }
     }
 }
