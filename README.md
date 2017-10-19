@@ -1,6 +1,6 @@
 # Twingly Search API .NET
 
-[![Build status AppVeyor](https://ci.appveyor.com/api/projects/status/h3ga4nbgue02ufcm?svg=true)](https://ci.appveyor.com/project/Twingly/twingly-search-api-dotnet)
+[![Build status](https://ci.appveyor.com/api/projects/status/h3ga4nbgue02ufcm/branch/master?svg=true)](https://ci.appveyor.com/project/Twingly/twingly-search-api-dotnet/branch/master)
 [![Build Status Travis](https://www.travis-ci.org/twingly/twingly-search-api-dotnet.svg?branch=master)](https://www.travis-ci.org/twingly/twingly-search-api-dotnet)
 
 .NET client for Twingly Search API (previously known as Twingly Analytics API). Twingly is a blog search service that provides [a searchable API](https://developer.twingly.com/resources/search/).
