@@ -87,7 +87,7 @@ namespace Twingly.Search.Client
         /// <returns>
         /// A half-baked query with the given <paramref name="language"/>.
         /// </returns>
-        [Obsolete]
+        [Obsolete("Use lang: operator in search query instead")]
         public QueryBuilder Language(Language language)
         {
             _internalQuery.Language = language.GetLanguageValue();
@@ -105,7 +105,7 @@ namespace Twingly.Search.Client
         /// <returns>
         /// A half-baked query with the given <paramref name="language"/>.
         /// </returns>
-        [Obsolete]
+        [Obsolete("Use lang: operator in search query instead")]
         public QueryBuilder Language(string language)
         {
             if (string.IsNullOrWhiteSpace(language))

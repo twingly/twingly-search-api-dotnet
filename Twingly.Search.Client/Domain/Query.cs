@@ -9,7 +9,7 @@ namespace Twingly.Search.Client.Domain
     {
         private string _searchQuery = string.Empty;
 
-        [Obsolete("Deprecated - use SearchQuery instead")]
+        [Obsolete("Use SearchQuery instead")]
         public string SearchPattern
         {
             get => _searchQuery;
@@ -57,7 +57,7 @@ namespace Twingly.Search.Client.Domain
         /// <summary>
         /// Gets or sets the language filter to be used during search.
         /// </summary>
-        [Obsolete("Deprecated - use search query instead")]
+        [Obsolete("Use lang: operator in search query instead")]
         public string Language
         {
             get;
