@@ -1,5 +1,8 @@
-﻿namespace Twingly.Search.Client.Exception
+﻿using System;
+
+namespace Twingly.Search.Client.Exception
 {
+    [Serializable]
     public class ServerException : RequestException
     {
         public ServerException()
