@@ -7,19 +7,19 @@ namespace Twingly.Search.Client.Domain
     /// <summary>
     /// Represents a single blog post.
     /// </summary>
-    [XmlRoot(ElementName = "post")]
+    [XmlRoot("post")]
     public class Post
     {
         /// <summary>
         /// The url to the post.
         /// </summary>
-        [XmlElement(ElementName = "url")]
+        [XmlElement("url")]
         public string Url { get; set; }
 
         /// <summary>
         /// The title of the post, limited to 256 characters.
         /// </summary>
-        [XmlElement(ElementName = "title")]
+        [XmlElement("title")]
         public string Title { get; set; }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace Twingly.Search.Client.Domain
         /// Note that the contents of the element may be large (several kilobytes).
         /// If the content is excessively large we may shorten it to ensure the stability of the service.
         /// </summary>
-        [XmlElement(ElementName = "text")]
+        [XmlElement("text")]
         public string Text { get; set; }
 
         [Obsolete("Use Text instead"), XmlIgnore]
@@ -36,7 +36,7 @@ namespace Twingly.Search.Client.Domain
         /// <summary>
         /// The ISO language code that represents the language the post was written in.
         /// </summary>
-        [XmlElement(ElementName = "languageCode")]
+        [XmlElement("languageCode")]
         public string LanguageCode { get; set; }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Twingly.Search.Client.Domain
         [Obsolete("Use PublishedAt instead"), XmlIgnore]
         public DateTime Published => PublishedAt;
 
-        [XmlElement(ElementName = "publishedAt")]
+        [XmlElement("publishedAt")]
         public string SerializerBackingStringFieldPublished { get; set; }
 
         /// <summary>
@@ -62,39 +62,39 @@ namespace Twingly.Search.Client.Domain
         [Obsolete("Use IndexedAt instead"), XmlIgnore]
         public DateTime Indexed => IndexedAt;
 
-        [XmlElement(ElementName = "indexedAt")]
+        [XmlElement("indexedAt")]
         public string SerializerBackingStringFieldIndexed { get; set; }
 
         /// <summary>
         /// The url to the blog.
         /// </summary>
-        [XmlElement(ElementName = "blogUrl")]
+        [XmlElement("blogUrl")]
         public string BlogUrl { get; set; }
 
         /// <summary>
         /// The name of the blog.
         /// </summary>
-        [XmlElement(ElementName = "blogName")]
+        [XmlElement("blogName")]
         public string BlogName { get; set; }
 
         /// <summary>
         /// The ID of the blog
         /// </summary>
-        [XmlElement(ElementName = "blogId")]
+        [XmlElement("blogId")]
         public string BlogId { get; set; }
 
         /// <summary>
         /// Indicates the authority of the blog, at time of indexing.
         /// <see cref="https://developer.twingly.com/resources/ranking#authority"/>
         /// </summary>
-        [XmlElement(ElementName = "authority")]
+        [XmlElement("authority")]
         public double Authority { get; set; }
 
         /// <summary>
         /// Indicates how influential the blog is, at time of indexing,
         /// <see cref="https://developer.twingly.com/resources/ranking#blogrank"/>.
         /// </summary>
-        [XmlElement(ElementName = "blogRank")]
+        [XmlElement("blogRank")]
         public double BlogRank { get; set; }
 
         /// <summary>
@@ -127,7 +127,7 @@ namespace Twingly.Search.Client.Domain
         [XmlIgnore]
         public DateTime ReindexedAt => DateTime.Parse(SerializerBackingStringFieldReIndexed);
 
-        [XmlElement(ElementName = "reindexedAt")]
+        [XmlElement("reindexedAt")]
         public string SerializerBackingStringFieldReIndexed { get; set; }
 
         /// <summary>

@@ -2,7 +2,7 @@
 
 namespace Twingly.Search.Client.Infrastructure
 {
-    [XmlRoot(ElementName = "error")]
+    [XmlRoot("error")]
     public class Error
     {
         [XmlAttribute("code")]
