@@ -9,7 +9,7 @@ namespace Twingly.Search.Client.Domain
     {
         /// <summary>
         /// Initializes a new configuration with the specified <paramref name="apiKey"/>
-        /// and the default timeout
+        /// and the default timeout.
         /// </summary>
         /// <param name="apiKey">
         /// Twingly Search API key. See <see cref="https://developer.twingly.com/resources/search/"/> for more details.
