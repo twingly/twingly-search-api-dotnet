@@ -10,6 +10,6 @@
         public static readonly string StartTime = "start-date";
         public static readonly string EndTime = "end-date";
         public static readonly string SearchQuery = "q";
-        public static readonly int DefaultTimeout = 10000; // 10 seconds.
+        public static readonly int DefaultTimeoutInMilliseconds = 10000;
     }
 }

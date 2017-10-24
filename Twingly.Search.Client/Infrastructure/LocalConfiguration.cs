@@ -51,13 +51,13 @@ namespace Twingly.Search.Client.Infrastructure
                 string timeoutValue = ReadConfigValue(Constants.TimeoutConfigSettingName);
                 returnValue = int.TryParse(timeoutValue, out var convertedValue)
                     ? convertedValue
-                    : Constants.DefaultTimeout;
+                    : Constants.DefaultTimeoutInMilliseconds;
             }
 
             catch (System.Exception)
             {
                 // handle gracefully, we'll use a default value.
-                returnValue = Constants.DefaultTimeout;
+                returnValue = Constants.DefaultTimeoutInMilliseconds;
             }
 
             return returnValue.Value;
