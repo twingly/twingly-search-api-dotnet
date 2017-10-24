@@ -1,11 +1,12 @@
 ﻿using System;
 using Twingly.Search.Client;
 using Twingly.Search.Client.Domain;
+using Twingly.Search.Client.Exception;
 
 namespace Twingly.Search.Samples
 {
     /// <summary>
-    /// Demos more advanced query language features, 
+    /// Demos more advanced query language features,
     /// such as logical operators and sorting.
     /// </summary>
     /// <remarks>
@@ -18,7 +19,7 @@ namespace Twingly.Search.Samples
             // get all posts about 'Slack' since yesterday, in English.
             // limit to 10 posts.
             Console.WriteLine("-------Running the 'Advanced Query Language' example-------");
-            Query theQuery = QueryBuilder.Create(GetSearchPatternWith("(Pasta Bolognese) OR (Pasta Carbonara)"))
+            Query theQuery = QueryBuilder.Create(GetSearchQueryWith("(Pasta Bolognese) OR (Pasta Carbonara)"))
                                                 .Build();
 
             ITwinglySearchClient client = new TwinglySearchClient();
@@ -30,10 +31,10 @@ namespace Twingly.Search.Samples
                 foreach (var doc in matchingDocs.Posts)
                 {
                     Console.WriteLine("Title: '{0}', Date: '{1}', Url: '{2}'",
-                                        doc.Title, doc.Published, doc.Url);
+                                        doc.Title, doc.PublishedAt, doc.Url);
                 }
             }
-            catch (TwinglyRequestException ex)
+            catch (RequestException ex)
             {
                 Console.WriteLine
                     ("Something went wrong while performing the request. Here's the error: '{0}'", ex);
@@ -43,12 +44,12 @@ namespace Twingly.Search.Samples
             Console.WriteLine();
         }
 
-        private static string GetSearchPatternWith(string keywords)
+        private static string GetSearchQueryWith(string keywords)
         {
             // sort by publishing date, oldest posts come first, return 15 results per page.
-            string searchPatternTemplate = "sort-order:asc sort:published page-size:15 {0}";
+            string searchQueryTemplate = "sort-order:asc sort:published page-size:15 {0}";
 
-            return string.Format(searchPatternTemplate, keywords);
+            return string.Format(searchQueryTemplate, keywords);
         }
     }
 }

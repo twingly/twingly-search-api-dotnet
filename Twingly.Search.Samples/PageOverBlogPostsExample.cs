@@ -2,6 +2,7 @@
 using System.Linq;
 using Twingly.Search.Client;
 using Twingly.Search.Client.Domain;
+using Twingly.Search.Client.Exception;
 
 namespace Twingly.Search.Samples
 {
@@ -29,12 +30,12 @@ namespace Twingly.Search.Samples
                 totalResultCount += matchingDocs.Posts.Count;
                 while (!matchingDocs.HasNoMoreResults)
                 {
-                    theQuery.StartTime = matchingDocs.Posts.Last().Published;
+                    theQuery.StartTime = matchingDocs.Posts.Last().PublishedAt;
                     matchingDocs = client.Query(theQuery);
                     totalResultCount += matchingDocs.Posts.Count;
                 }
             }
-            catch (TwinglyRequestException ex)
+            catch (RequestException ex)
             {
                 Console.WriteLine
                     ("Something went wrong while performing the request. Here's the error: '{0}'", ex);

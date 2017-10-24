@@ -10,23 +10,23 @@ namespace Twingly.Search.Tests
 {
     public class DelegatingHttpClientHandler : HttpClientHandler
     {
-        private readonly Action<HttpRequestMessage> requestCallback = null;
-        private readonly HttpResponseMessage response = null;
+        private readonly Action<HttpRequestMessage> _requestCallback;
+        private readonly HttpResponseMessage _response;
 
         public DelegatingHttpClientHandler(Action<HttpRequestMessage> requestCallback, HttpResponseMessage response)
         {
             if (requestCallback == null) throw new ArgumentNullException(nameof(requestCallback));
             if (response == null) throw new ArgumentNullException(nameof(response));
 
-            this.requestCallback = requestCallback;
-            this.response = response;
+            _requestCallback = requestCallback;
+            _response = response;
         }
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            requestCallback(request);
+            _requestCallback(request);
 
-            return Task.Factory.StartNew<HttpResponseMessage>(() => response, cancellationToken);
+            return Task.Factory.StartNew(() => _response, cancellationToken);
         }
 
         /// <summary>
@@ -34,9 +34,9 @@ namespace Twingly.Search.Tests
         /// </summary>
         public static HttpResponseMessage GetStreamHttpResponseMessage(string content,
             HttpStatusCode httpStatusCode = HttpStatusCode.OK,
-            string mediaType = "application/json")
+            string mediaType = "text/xml")
         {
-            byte[] contentBytes = Encoding.UTF8.GetBytes(content);
+            var contentBytes = Encoding.UTF8.GetBytes(content);
             var stream = new MemoryStream(contentBytes);
 
             return new HttpResponseMessage

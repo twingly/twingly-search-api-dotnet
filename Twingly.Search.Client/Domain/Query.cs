@@ -7,33 +7,37 @@ namespace Twingly.Search.Client.Domain
     /// </summary>
     public class Query
     {
-        private string searchPattern = string.Empty;
+        private string _searchQuery = string.Empty;
+
+        [Obsolete("Use SearchQuery instead")]
+        public string SearchPattern
+        {
+            get => _searchQuery;
+            set => SearchQuery = value;
+        }
 
         /// <summary>
-        /// The pattern to use when searching for blog posts
+        /// The query to use when searching for blog posts
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException">
         /// Thrown when the property is set to a null or empty string
         /// </exception>
-        public string SearchPattern
+        public string SearchQuery
         {
-            get
-            {
-                return searchPattern;
-            }
+            get => _searchQuery;
 
             set
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new ArgumentOutOfRangeException("SearchPattern", "Please provide a non-empty string as a search pattern.");
+                    throw new ArgumentOutOfRangeException(nameof(SearchQuery), "Please provide a non-empty string as a search query.");
                 }
-                searchPattern = value;
+                _searchQuery = value;
             }
         }
 
         /// <summary>
-        /// Used to only include posts published after a certain UTC timestamp. 
+        /// Used to only include posts published after a certain UTC timestamp.
         /// </summary>
         public DateTime? StartTime
         {
@@ -42,7 +46,7 @@ namespace Twingly.Search.Client.Domain
         }
 
         /// <summary>
-        /// Used to exclude posts published after a certain UTC timestamp. 
+        /// Used to exclude posts published after a certain UTC timestamp.
         /// </summary>
         public DateTime? EndTime
         {
@@ -53,6 +57,7 @@ namespace Twingly.Search.Client.Domain
         /// <summary>
         /// Gets or sets the language filter to be used during search.
         /// </summary>
+        [Obsolete("Use lang: operator in search query instead")]
         public string Language
         {
             get;
@@ -61,15 +66,15 @@ namespace Twingly.Search.Client.Domain
 
         /// <summary>
         /// Creates a new instance of a <see cref="Query"/>
-        /// with the given <paramref name="searchPattern"/>.
+        /// with the given <paramref name="searchQuery"/>.
         /// </summary>
-        /// <param name="searchPattern">The pattern to use when searching for blog posts</param>
+        /// <param name="searchQuery">The query to use when searching for blog posts</param>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// Thrown when the <paramref name="searchPattern"/> is set to a null or empty string
+        /// Thrown when the <paramref name="searchQuery"/> is set to a null or empty string
         /// </exception>
-        public Query(string searchPattern)
+        public Query(string searchQuery)
         {
-            SearchPattern = searchPattern;
+            SearchQuery = searchQuery;
         }
 
         internal void ThrowIfNotAValidStartTime(DateTime startTime)

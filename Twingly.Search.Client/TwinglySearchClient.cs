@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Configuration;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
@@ -8,6 +8,7 @@ using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 using Twingly.Search.Client.Domain;
+using Twingly.Search.Client.Exception;
 using Twingly.Search.Client.Infrastructure;
 
 namespace Twingly.Search.Client
@@ -17,31 +18,28 @@ namespace Twingly.Search.Client
     /// </summary>
     public class TwinglySearchClient : ITwinglySearchClient
     {
-        private readonly HttpClient internalClient = null;
-        private readonly TwinglyConfiguration config = null;
-        private static readonly string requestFormat = "?key={0}&" + Constants.SearchPattern + "={1}&xmloutputversion=2";
+        private readonly HttpClient _internalClient;
+        private readonly TwinglyConfiguration _config;
+        private static readonly string RequestFormat = "?apikey={0}&" + Constants.SearchQuery + "={1}";
 
-        private static readonly string userAgentTemplate = "{0}/.NET v." + Assembly.GetExecutingAssembly().GetName().Version;
+        private static readonly string UserAgentTemplate = "{0}/.NET v." + Assembly.GetExecutingAssembly().GetName().Version;
 
-        private string userAgent = null;
+        private string _userAgent;
 
         /// <summary>
         /// Gets or sets the HTTP request User-Agent property.
         /// </summary>
         public string UserAgent
         {
-            get
-            {
-                return userAgent;
-            }
+            get => _userAgent;
             set
             {
                 if (!string.IsNullOrWhiteSpace(value))
                 {
-                    userAgent = string.Format(userAgentTemplate, value);
+                    _userAgent = string.Format(UserAgentTemplate, value);
 
-                    internalClient.DefaultRequestHeaders.UserAgent.Clear();
-                    internalClient.DefaultRequestHeaders.UserAgent.ParseAdd(userAgent);
+                    _internalClient.DefaultRequestHeaders.UserAgent.Clear();
+                    _internalClient.DefaultRequestHeaders.UserAgent.ParseAdd(_userAgent);
                 }
             }
         }
@@ -53,7 +51,6 @@ namespace Twingly.Search.Client
         /// </summary>
         public TwinglySearchClient() : this(new LocalConfiguration())
         {
-
         }
 
         /// <summary>
@@ -62,8 +59,8 @@ namespace Twingly.Search.Client
         /// </summary>
         public TwinglySearchClient(TwinglyConfiguration config)
         {
-            this.config = config;
-            internalClient = new HttpClient();
+            _config = config;
+            _internalClient = new HttpClient();
             InitializeClient();
         }
 
@@ -73,15 +70,15 @@ namespace Twingly.Search.Client
         /// </summary>
         internal TwinglySearchClient(TwinglyConfiguration clientConfig, HttpClient client)
         {
-            config = clientConfig;
-            internalClient = client;
+            _config = clientConfig;
+            _internalClient = client;
             InitializeClient();
         }
 
         private void InitializeClient()
         {
-            internalClient.BaseAddress = new Uri(Constants.ApiBaseAddress);
-            internalClient.Timeout = TimeSpan.FromMilliseconds(config.RequestTimeoutMilliseconds);
+            _internalClient.BaseAddress = new Uri(Constants.ApiBaseAddress);
+            _internalClient.Timeout = TimeSpan.FromMilliseconds(_config.RequestTimeoutMilliseconds);
             UserAgent = "Twingly Search API Client";
         }
 
@@ -92,12 +89,6 @@ namespace Twingly.Search.Client
         /// <returns>
         /// Result of <paramref name="theQuery"/>.
         /// </returns>
-        /// <exception cref="TwinglyServiceUnavailableException">Thrown when the Twingly Search API reports that service is unavailable.</exception>
-        /// <exception cref="ApiKeyDoesNotExistException">Thrown when the supplied API key was not recognized by the remote server.</exception>
-        /// <exception cref="UnauthorizedApiKeyException">
-        /// Thrown when the supplied API key can't be used to service the query.
-        /// </exception>
-        /// <exception cref="TwinglyRequestException">Thrown when any other error occurs.</exception>
         public async Task<QueryResult> QueryAsync(Query theQuery)
         {
             if (theQuery == null)
@@ -108,30 +99,23 @@ namespace Twingly.Search.Client
 
             string requestUri = BuildRequestUriFrom(theQuery);
             string result = string.Empty;
-            QueryResult returnValue = null;
+            QueryResult returnValue;
             try
             {
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
-
-                using (Stream resultStream =
-                    await internalClient.GetStreamAsync(requestUri).ConfigureAwait(false)) // continue on the thread pool to avoid deadlocks
+                using (var response = await _internalClient.GetAsync(requestUri).ConfigureAwait(false))
                 {
-                    sw.Stop();
-                    Debug.WriteLine("Received server response in {0} ms", sw.ElapsedMilliseconds);
-                    sw.Restart();
-                    result = resultStream.ReadStreamIntoString();
-                }
+                    result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw MapResponseToException(result);
+                    }
 
-                returnValue = result.DeserializeXml<QueryResult>();
-                returnValue.Posts = returnValue.Posts?.Where(p => p.ContentType.Equals(ContentType.Blog)).ToList();
-                sw.Stop();
-                Debug.WriteLine("Deserialized server response in {0} ms", sw.ElapsedMilliseconds);
+                    returnValue = result.DeserializeXml<QueryResult>();
+                }
             }
-            catch (Exception ex)
+            catch (TaskCanceledException e)
             {
-                var wrapperException = MapResponseToException(result, ex);
-                throw wrapperException;
+                throw new RequestException("The request has timed out", e);
             }
 
             return returnValue;
@@ -144,12 +128,6 @@ namespace Twingly.Search.Client
         /// <returns>
         /// Result of <paramref name="theQuery"/>.
         /// </returns>
-        /// <exception cref="TwinglyServiceUnavailableException">Thrown when the Twingly Search API reports that service is unavailable.</exception>
-        /// <exception cref="ApiKeyDoesNotExistException">Thrown when the supplied API key was not recognized by the remote server.</exception>
-        /// <exception cref="UnauthorizedApiKeyException">
-        /// Thrown when the supplied API key can't be used to service the query.
-        /// </exception>
-        /// <exception cref="TwinglyRequestException">Thrown when any other error occurs.</exception>
         public QueryResult Query(Query theQuery)
         {
             QueryResult returnValue = null;
@@ -167,75 +145,60 @@ namespace Twingly.Search.Client
             return returnValue;
         }
 
-        private Exception MapResponseToException(string responseString, Exception inner)
+        private static System.Exception MapResponseToException(string responseString)
         {
-
-            BlogStream errorResponse = null;
-            if (inner is TaskCanceledException)
-            {
-                return new TwinglyRequestException("The request has timed out", inner);
-            }
             if (string.IsNullOrWhiteSpace(responseString))
             {
-                return new TwinglyRequestException("Twingly Search API returned an empty response", inner);
+                return new RequestException("Twingly Search API returned an empty response");
             }
+
+            Error errorResponse;
             try
             {
-                errorResponse = responseString.DeserializeXml<BlogStream>();
+                errorResponse = responseString.DeserializeXml<Error>();
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
-                return new TwinglyRequestException
-                    ("Couldn't deserialize API response. See the inner exception for details", ex);
+                return new RequestException("Couldn't deserialize API response. See the inner exception for details", ex);
             }
 
-            if (errorResponse != null)
+            var errorCode = errorResponse.Code;
+            if (errorCode.StartsWith("4"))
             {
-                if (errorResponse.Result.Text.Equals(Constants.ServiceUnavailable, StringComparison.InvariantCultureIgnoreCase))
+                if (errorCode.StartsWith("400") || errorCode.StartsWith("404"))
                 {
-                    return new TwinglyServiceUnavailableException(inner);
+                    return new QueryException($"{errorResponse.Message} (code:{errorCode})");
                 }
-                else if (errorResponse.Result.Text.Equals(Constants.ApiKeyDoesNotExist, StringComparison.InvariantCultureIgnoreCase))
+                if (errorCode.StartsWith("401") || errorCode.StartsWith("402"))
                 {
-                    return new ApiKeyDoesNotExistException(inner);
-                }
-                else if (errorResponse.Result.Text.Equals(Constants.UnauthorizedApiKey, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    return new UnauthorizedApiKeyException(inner);
-                }
-                else
-                {
-                    // since we managed to deserialize into BlogStream, we just don't know what the error is.
-                    // This means that it's reasonable not to be afraid that the responseString is too large.
-                    // It also shouldn't contain any sensitive data. Hence, including it into the error message is safe.
-                    return new TwinglyRequestException
-                        (string.Format("Twingly Search API returned an unknown error: {0}", responseString), inner);
+                    return new AuthException($"{errorResponse.Message} (code:{errorCode})");
                 }
             }
-            else
+            if (errorCode.StartsWith("5"))
             {
-                return new TwinglyRequestException(inner);
+                return new ServerException($"{errorResponse.Message} (code:{errorCode})");
             }
+
+            return new RequestException($"Twingly Search API returned an unknown error: {responseString}");
         }
 
-        private string BuildRequestUriFrom(Query theQuery)
+        private string BuildRequestUriFrom(Query query)
         {
-            string initialRequest = string.Format(requestFormat, config.ApiKey, Uri.EscapeDataString(theQuery.SearchPattern));
-            var builder = new StringBuilder(initialRequest);
-            if (!string.IsNullOrWhiteSpace(theQuery.Language))
+            var fullSearchQuery = new StringBuilder(query.SearchQuery);
+            if (!string.IsNullOrWhiteSpace(query.Language))
             {
-                builder.AppendFormat("&{0}={1}", Constants.DocumentLanguage, theQuery.Language);
+                fullSearchQuery.AppendFormat(" {0}:{1}", Constants.DocumentLanguage, query.Language);
             }
-            if (theQuery.StartTime.HasValue)
+            if (query.StartTime.HasValue)
             {
-                builder.AppendFormat("&{0}={1}", Constants.StartTime, theQuery.StartTime.Value.ToString(Constants.ApiDateFormat));
+                fullSearchQuery.AppendFormat(" {0}:{1}", Constants.StartTime, query.StartTime.Value.ToString(Constants.ApiDateFormat));
             }
-            if (theQuery.EndTime.HasValue)
+            if (query.EndTime.HasValue)
             {
-                builder.AppendFormat("&{0}={1}", Constants.EndTime, theQuery.EndTime.Value.ToString(Constants.ApiDateFormat));
+                fullSearchQuery.AppendFormat(" {0}:{1}", Constants.EndTime, query.EndTime.Value.ToString(Constants.ApiDateFormat));
             }
 
-            return builder.ToString();
+            return string.Format(RequestFormat, _config.ApiKey, Uri.EscapeDataString(fullSearchQuery.ToString()));
         }
     }
 }

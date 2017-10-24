@@ -56,17 +56,17 @@ To learn more about the features of this client, check out the example code in [
 
 ### Exception handling
 
-Client exceptions are organized into the following hierachy:
-* `TwinglyRequestException` - base class for any Twingly-related exception
-    * `ApiKeyDoesNotExistException` - thrown when no API key was found
-    * `UnauthorizedApiKeyException` - thrown when API key is not authorized for the action being performed
-    * `TwinglyServiceUnavailableException` - thrown when service is not available
-    * `ApiKeyNotConfiguredException` - thrown when an API key was not found in the config file
+Exceptions are organized into the following hierachy:
+* `RequestException` - base class for any Twingly-related exception
+  * `AuthException` - thrown when the provided key does not have access to the API
+  * `QueryException` - thrown when there is something wrong with the parameters or the query sent to the API
+  * `ServerException` - thrown when service is not available
+* `ApiKeyNotConfiguredException` - thrown when an API key was not found in the config file
 
 ## Requirements
 
 * API key, [sign up](https://www.twingly.com/try-for-free) via [twingly.com](https://www.twingly.com/) to get one
-* .NET Framework v4.5.1 or Mono 4.4
+* .NET Framework v4.5.2 or Mono 5.0
 
 ## Development
 

@@ -15,30 +15,30 @@ namespace Twingly.Search.Tests
     public class QueryBuilderTests
     {
         [Test]
-        public void When_CreatingQueryWithNullSearchPattern_Then_ShouldThrow()
+        public void When_CreatingQueryWithNullSearchQuery_Then_ShouldThrow()
         {
             // Arrange
-            string searchPattern = null;
+            string searchQuery = null;
 
             // Act & Assert
             // Should throw exception now
             Assert.Throws<ArgumentOutOfRangeException>(
-                () => { QueryBuilder.Create(searchPattern); },
-                "Failed to throw an exception on a null search pattern"
+                () => { QueryBuilder.Create(searchQuery); },
+                "Failed to throw an exception on a null search query"
             );
         }
 
         [Test]
-        public void When_CreatingQueryWithEmptySearchPattern_Then_ShouldThrow()
+        public void When_CreatingQueryWithEmptySearchQuery_Then_ShouldThrow()
         {
             // Arrange
-            string searchPattern = string.Empty;
+            string searchQuery = string.Empty;
 
             // Act & Assert
             // Should throw exception now
             Assert.Throws<ArgumentOutOfRangeException>(
-               () => { QueryBuilder.Create(searchPattern); },
-               "Failed to throw an exception on an empty search pattern"
+               () => { QueryBuilder.Create(searchQuery); },
+               "Failed to throw an exception on an empty search query"
             );
         }
 
@@ -46,14 +46,14 @@ namespace Twingly.Search.Tests
         public void When_StartDateInTheFuture_Then_ShouldThrow()
         {
             // Arrange
-            string searchPattern = "Hey, i'm valid!";
+            string searchQuery = "Hey, i'm valid!";
 
             // Act & Assert
             // Should throw exception now
             Assert.Throws<ArgumentOutOfRangeException>(
                 () =>
                 {
-                    QueryBuilder.Create(searchPattern)
+                    QueryBuilder.Create(searchQuery)
                                 .StartTime(DateTime.UtcNow.AddDays(1))
                                 .Build();
                 },
@@ -65,14 +65,14 @@ namespace Twingly.Search.Tests
         public void When_EndDateComesEarlierThanStartDate_Then_ShouldThrow()
         {
             // Arrange
-            string searchPattern = "Hey, i'm valid!";
+            string searchQuery = "Hey, i'm valid!";
 
             // Act & Assert
             // Should throw exception now
             Assert.Throws<ArgumentOutOfRangeException>(
                 () =>
                 {
-                    QueryBuilder.Create(searchPattern)
+                    QueryBuilder.Create(searchQuery)
                                 .StartTime(DateTime.UtcNow)
                                 .EndTime(DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)))
                                 .Build();
@@ -82,50 +82,50 @@ namespace Twingly.Search.Tests
         }
 
         [Test]
-        public void When_SettingQueryPatternToNull_Then_ShouldThrow()
+        public void When_SettingQueryToNull_Then_ShouldThrow()
         {
             // Arrange
-            string searchPattern = "Hey, i'm valid at first!";
-            QueryBuilder builder = QueryBuilder.Create(searchPattern)
+            string searchQuery = "Hey, i'm valid at first!";
+            QueryBuilder builder = QueryBuilder.Create(searchQuery)
                                                 .StartTime(DateTime.UtcNow)
                                                 .EndTime(DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)));
 
             // Act & Assert
             Assert.Throws<ArgumentOutOfRangeException>(
-                () => { builder.SearchPattern(null); },
-                "Failed to throw an exception on an empty search pattern"
+                () => { builder.SearchQuery(null); },
+                "Failed to throw an exception on an empty search query"
             );
         }
 
         [Test]
-        public void When_SettingQueryPatternToEmptyString_Then_ShouldThrow()
+        public void When_SettingQueryToEmptyString_Then_ShouldThrow()
         {
             // Arrange
-            string searchPattern = "Hey, i'm valid at first!";
-            QueryBuilder builder = QueryBuilder.Create(searchPattern)
+            string searchQuery = "Hey, i'm valid at first!";
+            QueryBuilder builder = QueryBuilder.Create(searchQuery)
                                                 .StartTime(DateTime.UtcNow)
                                                 .EndTime(DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)));
 
             // Act & Assert
             Assert.Throws<ArgumentOutOfRangeException>(
-                () => { builder.SearchPattern(string.Empty); },
-                "Failed to throw an exception on an null search pattern"
+                () => { builder.SearchQuery(string.Empty); },
+                "Failed to throw an exception on an null search query"
             );
         }
 
         [Test]
-        public void When_CreatingQueryWithValidPattern_Then_ShouldSucceed()
+        public void When_CreatingQueryWithValidQuery_Then_ShouldSucceed()
         {
             // Arrange
-            string searchPattern = "Hey, i'm totally valid!";
-            string errorMessage = "Failed to set the search pattern to the given value";
+            string searchQuery = "Hey, i'm totally valid!";
+            string errorMessage = "Failed to set the search query to the given value";
 
             // Act
-            Query testResult = QueryBuilder.Create(searchPattern)
+            Query testResult = QueryBuilder.Create(searchQuery)
                                                 .Build();
 
             // Assert
-            Assert.AreEqual(searchPattern, testResult.SearchPattern, errorMessage);
+            Assert.AreEqual(searchQuery, testResult.SearchQuery, errorMessage);
         }
 
         [Test]

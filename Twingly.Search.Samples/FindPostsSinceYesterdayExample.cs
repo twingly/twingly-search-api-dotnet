@@ -1,6 +1,7 @@
 ﻿using System;
 using Twingly.Search.Client;
 using Twingly.Search.Client.Domain;
+using Twingly.Search.Client.Exception;
 
 namespace Twingly.Search.Samples
 {
@@ -16,9 +17,8 @@ namespace Twingly.Search.Samples
             // get all posts about 'Slack' since yesterday, in English.
             // limit to 10 posts.
             Console.WriteLine("-------Running the 'Find Posts Since Yesterday' example-------");
-            Query theQuery = QueryBuilder.Create("Slack page-size:10")
+            Query theQuery = QueryBuilder.Create("Slack page-size:10 lang:en")
                                                 .StartTime(DateTime.UtcNow.Subtract(TimeSpan.FromDays(1)))
-                                                .Language(Language.English) // if you skipped it, English would be used as default
                                                 .Build();
 
             ITwinglySearchClient client = new TwinglySearchClient();
@@ -30,10 +30,10 @@ namespace Twingly.Search.Samples
                 foreach (var doc in matchingDocs.Posts)
                 {
                     Console.WriteLine("Title: '{0}', Date: '{1}', Url: '{2}'",
-                                        doc.Title, doc.Published, doc.Url);
+                                        doc.Title, doc.PublishedAt, doc.Url);
                 }
             }
-            catch (TwinglyRequestException ex)
+            catch (RequestException ex)
             {
                 Console.WriteLine
                     ("Something went wrong while performing the request. Here's the error: '{0}'", ex);
