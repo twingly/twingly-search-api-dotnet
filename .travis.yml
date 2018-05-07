@@ -5,10 +5,10 @@ mono:
 solution: Twingly.Search.sln
 install:
   - nuget restore Twingly.Search.sln
-  - nuget install NUnit.Runners -Version 3.4.1 -OutputDirectory packages
+  - nuget install NUnit.Console -Version 3.8.0 -OutputDirectory packages
 script:
   - msbuild /p:Configuration=Release Twingly.Search.sln /v:minimal
-  - mono ./packages/NUnit.ConsoleRunner.3.4.1/tools/nunit3-console.exe ./Twingly.Search.Tests/bin/Release/Twingly.Search.Tests.dll
+  - mono ./packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe ./Twingly.Search.Tests/bin/Release/Twingly.Search.Tests.dll
 notifications:
   email: false
   hipchat:
