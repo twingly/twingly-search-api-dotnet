@@ -11,12 +11,3 @@ script:
   - mono ./packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe ./Twingly.Search.Tests/bin/Release/Twingly.Search.Tests.dll
 notifications:
   email: false
-  hipchat:
-    on_success: never
-    on_failure: change
-    template:
-    - '%{repository}#%{build_number} (%{branch} - %{commit} : %{author}): %{message}
-      (<a href="%{build_url}">Details</a>/<a href="%{compare_url}">Change view</a>)'
-    format: html
-    rooms:
-      secure: SwHTTJDWuiBx9g77RrheMxwQtsMXNyPQQRfDAqzdTuUbNOYOO80MEjds2uQpWETRJo3eDeKXAUXGs5KUMdT13hArNj8ojXlTmvv6ThI/t3FQ0KSvnmCTOUJm831ij82oZ1CNV/y3gFbDHRjyp2ei198GpGoXwLBys3orOY58gnIQWBatX1BvQSNztZAnHm4G/x/XM/y/cEinaCS71VlvFX59DOClzfcA/AQWsqg2bE2RkZ2Ka6JyPWK3GnAiMCXjTTNrrQSdKVtExZegAWDIAKE42uV38btFpT8oyPeANcDVKDA8ZzA8rpx6i0c1v5T3+4vDm8n21whHKee6SYzBOEbX+pV29aixt87mtxQIWx6nMDfGKvnV4FpNR+oYIf85i3/Jk4NSl7wLjD55HWSodhXu8AMMdK07/9C6iFqUVee+3/ZqA6WYigSLNmvNRrmuF3dSnjrERooQn9QuCGeUXY2OsNcPEjXP4VQfOsOumubd+0V4VIyVTJqCVvD12SBgiWn+JxYs5sTLJwtScYqLWt5YzeZfC3152T3JL9f2Zfu+1Td/tDHFhqmOT1nSo4vzAeNiN/FGzOp35Vtop6gOHg7inp5cq1SNxa45CWkBSDIre2qHaFGtm+CgfO1g+QFO4orwdff3yQADYO1k1qOD/UPJy+84dtsc+5lJEmvZMkU=
