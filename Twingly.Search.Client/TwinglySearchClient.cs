@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Configuration;
-using System.Diagnostics;
-using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
@@ -60,7 +58,11 @@ namespace Twingly.Search.Client
         public TwinglySearchClient(TwinglyConfiguration config)
         {
             _config = config;
-            _internalClient = new HttpClient();
+            _internalClient = new HttpClient(new HttpClientHandler()
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate                         
+            }
+            );
             InitializeClient();
         }
 
