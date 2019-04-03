@@ -3,6 +3,8 @@ mono:
   - 5.0.0
   - 5.4.0
   - 5.12.0
+env:
+  - FrameworkPathOverride=/usr/lib/mono/4.5/
 solution: Twingly.Search.sln
 install:
   - nuget restore Twingly.Search.sln
