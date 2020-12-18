@@ -24,10 +24,10 @@ jobs:
       - name: Install dependencies
         run: |
           nuget restore Twingly.Search.sln
-          nuget install NUnit.Console -Version 3.9.0 -OutputDirectory packages
+          nuget install NUnit.Console -Version 3.11.1 -OutputDirectory packages
 
       - name: Build project
         run: xbuild /p:Configuration=Release Twingly.Search.sln /v:minimal
 
       - name: Run tests
-        run: mono ./packages/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe ./Twingly.Search.Tests/bin/Release/Twingly.Search.Tests.dll
+        run: mono ./packages/NUnit.ConsoleRunner.3.11.1/tools/nunit3-console.exe ./Twingly.Search.Tests/bin/Release/Twingly.Search.Tests.dll
