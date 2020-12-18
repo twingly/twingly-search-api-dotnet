@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  run-ci:
+  run-mono-ci:
     name: Run
 
     runs-on: ubuntu-latest

@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  run-ci:
+  run-windows-ci:
     name: Run
 
     runs-on: windows-2019
