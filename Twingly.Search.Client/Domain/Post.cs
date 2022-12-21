@@ -85,14 +85,14 @@ namespace Twingly.Search.Client.Domain
 
         /// <summary>
         /// Indicates the authority of the blog, at time of indexing.
-        /// <see cref="https://developer.twingly.com/resources/ranking#authority"/>
+        /// <see cref="https://app.twingly.com/blog_search?tab=documentation"/>
         /// </summary>
         [XmlElement("authority")]
         public double Authority { get; set; }
 
         /// <summary>
         /// Indicates how influential the blog is, at time of indexing,
-        /// <see cref="https://developer.twingly.com/resources/ranking#blogrank"/>.
+        /// <see cref="https://app.twingly.com/blog_search?tab=documentation"/>.
         /// </summary>
         [XmlElement("blogRank")]
         public double BlogRank { get; set; }

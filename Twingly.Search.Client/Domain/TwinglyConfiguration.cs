@@ -12,7 +12,7 @@ namespace Twingly.Search.Client.Domain
         /// and the default timeout.
         /// </summary>
         /// <param name="apiKey">
-        /// Twingly Search API key. See <see cref="https://developer.twingly.com/resources/search/"/> for more details.
+        /// Twingly Search API key. See <see cref="https://app.twingly.com/blog_search?tab=documentation"/> for more details.
         /// </param>
         public TwinglyConfiguration(string apiKey) : this(apiKey, Constants.DefaultTimeoutInMilliseconds)
         {
@@ -24,7 +24,7 @@ namespace Twingly.Search.Client.Domain
         /// and <paramref name="requestTimeoutMilliseconds"/>.
         /// </summary>
         /// <param name="apiKey">
-        /// Twingly Search API key. See <see cref="https://developer.twingly.com/resources/search/"/> for more details.
+        /// Twingly Search API key. See <see cref="https://app.twingly.com/blog_search?tab=documentation"/> for more details.
         /// </param>
         /// <param name="requestTimeoutMilliseconds">
         /// The configured request timeout in milliseconds.

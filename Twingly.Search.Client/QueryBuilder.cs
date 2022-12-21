@@ -37,7 +37,7 @@ namespace Twingly.Search.Client
         /// <exception cref="ArgumentOutOfRangeException">
         /// Thrown when the specified search query is a null or empty string.
         /// </exception>
-        /// <see cref="https://developer.twingly.com/resources/search-language/"/>
+        /// <see cref="https://app.twingly.com/blog_search?tab=documentation"/>
         public QueryBuilder SearchQuery(string query)
         {
             _internalQuery.SearchQuery = query;
