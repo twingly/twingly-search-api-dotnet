@@ -9,7 +9,7 @@ namespace Twingly.Search.Samples
     /// <summary>
     /// Showcases how to retrieve all matching posts
     /// in a paged manner. Paging is done via the sliding window technique.
-    /// See https://developer.twingly.com/resources/search/#pagination for more details.
+    /// See https://app.twingly.com/blog_search?tab=documentation for more details.
     /// </summary>
     public static class PageOverBlogPostsExample
     {

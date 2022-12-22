@@ -3,9 +3,9 @@
 namespace Twingly.Search.Client.Domain
 {
     /// <summary>
-    /// Enumerates all the languages supported by Twingly. 
+    /// Enumerates all the languages supported by Twingly.
     /// </summary>
-    /// <see cref="https://developer.twingly.com/resources/search-language/#supported-languages"/>
+    /// <see cref="https://app.twingly.com/blog_search?tab=documentation"/>
     public enum Language
     {
         /// <summary>
